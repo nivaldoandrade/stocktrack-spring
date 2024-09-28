@@ -1,0 +1,25 @@
+package com.nasa.stocktrack.domain.entities;
+
+import java.util.UUID;
+
+public class Category {
+    private UUID id;
+
+    private String name;
+
+    public UUID getId() {
+        return id;
+    }
+
+    public Category(String name) {
+        this.name = name;
+    }
+    public Category(UUID id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+}
