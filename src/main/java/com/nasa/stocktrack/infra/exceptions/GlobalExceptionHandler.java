@@ -2,18 +2,34 @@ package com.nasa.stocktrack.infra.exceptions;
 
 
 import com.nasa.stocktrack.domain.exceptions.EntityExistsException;
+import com.nasa.stocktrack.domain.exceptions.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<RestErrorResponse> handleEntityNotFoundException(EntityNotFoundException e) {
+        int status = HttpStatus.NOT_FOUND.value();
+
+        RestErrorResponse error = new RestErrorResponse(
+                status,
+                e.getMessage(),
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(status).body(error);
+    }
 
     @ExceptionHandler(EntityExistsException.class)
     public ResponseEntity<RestErrorResponse> handleEntityExistsException(EntityExistsException e) {
@@ -55,5 +71,30 @@ public class GlobalExceptionHandler {
 
 
         return ResponseEntity.status(statusCode).body(error);
+    }
+
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    public ResponseEntity<RestErrorResponseWithErrors> HandlerMethodValidationException(HandlerMethodValidationException e) {
+        int statusCode = HttpStatus.BAD_REQUEST.value();
+
+        List<ApiError> errors = new ArrayList<>();
+
+        e.getAllValidationResults().forEach(validator -> {
+            String parameterName = validator.getMethodParameter().getParameterName();
+
+            validator.getResolvableErrors().forEach(ve -> {
+                errors.add(new ApiError(parameterName, ve.getDefaultMessage()));
+            });
+        });
+
+
+        RestErrorResponseWithErrors error = new RestErrorResponseWithErrors(
+                statusCode,
+                errors,
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(statusCode).body(error);
+
     }
 }

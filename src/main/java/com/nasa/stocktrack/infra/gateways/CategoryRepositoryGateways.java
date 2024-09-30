@@ -34,4 +34,11 @@ public class CategoryRepositoryGateways implements CategoryGateway {
 
         return categoryEntity.map(categoryMapper::toDomain).orElse(null);
     }
+
+    @Override
+    public Category findById(UUID id) {
+        Optional<CategoryEntity> categoryEntity = categoryRepository.findById(id);
+
+        return categoryEntity.map(categoryMapper::toDomain).orElse(null);
+    }
 }
