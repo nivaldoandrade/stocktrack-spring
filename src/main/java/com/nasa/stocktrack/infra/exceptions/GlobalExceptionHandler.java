@@ -9,6 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -97,4 +98,20 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(statusCode).body(error);
 
     }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<RestErrorResponse> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
+        int statusCode = HttpStatus.BAD_REQUEST.value();
+
+        String message = String.format("The parameter %s is invalid", e.getName());
+
+        RestErrorResponse error = new RestErrorResponse(
+                statusCode,
+                message,
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(statusCode).body(error);
+    }
+
 }
