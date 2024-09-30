@@ -15,5 +15,7 @@ public interface CategoryGateway {
     Category findByName(String name);
 
     Category findById(UUID id);
+
+    void update(Category category);
 }
 

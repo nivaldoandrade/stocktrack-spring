@@ -60,4 +60,11 @@ public class CategoryRepositoryGateways implements CategoryGateway {
 
         return categoryEntity.map(categoryMapper::toDomain).orElse(null);
     }
+
+    @Override
+    public void update(Category category) {
+        CategoryEntity categoryEntity = categoryMapper.toEntity(category);
+
+        categoryRepository.save(categoryEntity);
+    }
 }

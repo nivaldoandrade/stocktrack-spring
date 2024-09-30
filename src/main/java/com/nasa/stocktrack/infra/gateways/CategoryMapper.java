@@ -14,6 +14,7 @@ public class CategoryMapper {
     CategoryEntity toEntity(Category category) {
         CategoryEntity categoryEntity = new CategoryEntity();
 
+        categoryEntity.setId(category.getId());
         categoryEntity.setName(category.getName());
 
         return categoryEntity;

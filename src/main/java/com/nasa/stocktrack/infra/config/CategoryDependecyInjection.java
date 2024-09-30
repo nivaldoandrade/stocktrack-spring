@@ -4,6 +4,7 @@ import com.nasa.stocktrack.application.gateways.CategoryGateway;
 import com.nasa.stocktrack.application.usecases.category.CreateCategoryUseCase;
 import com.nasa.stocktrack.application.usecases.category.ListCategoryUseCase;
 import com.nasa.stocktrack.application.usecases.category.ShowCategoryUseCase;
+import com.nasa.stocktrack.application.usecases.category.UpdateCategoryUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -23,5 +24,10 @@ public class CategoryDependecyInjection {
     @Bean
     ListCategoryUseCase listCategoryUseCase(CategoryGateway categoryGateway) {
         return new ListCategoryUseCase(categoryGateway);
+    }
+
+    @Bean
+    UpdateCategoryUseCase updateCategoryUseCase(CategoryGateway categoryGateway, ShowCategoryUseCase showCategoryUseCase) {
+        return new UpdateCategoryUseCase(categoryGateway, showCategoryUseCase);
     }
 }

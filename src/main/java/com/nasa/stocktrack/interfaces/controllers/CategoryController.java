@@ -3,6 +3,7 @@ package com.nasa.stocktrack.interfaces.controllers;
 import com.nasa.stocktrack.application.usecases.category.CreateCategoryUseCase;
 import com.nasa.stocktrack.application.usecases.category.ListCategoryUseCase;
 import com.nasa.stocktrack.application.usecases.category.ShowCategoryUseCase;
+import com.nasa.stocktrack.application.usecases.category.UpdateCategoryUseCase;
 import com.nasa.stocktrack.domain.entities.Category;
 import com.nasa.stocktrack.domain.entities.ListCategory;
 import com.nasa.stocktrack.domain.enums.OrderByEnum;
@@ -12,6 +13,7 @@ import com.nasa.stocktrack.interfaces.ResourceURIHelper;
 import com.nasa.stocktrack.interfaces.dtos.CategoryDTO;
 import com.nasa.stocktrack.interfaces.dtos.CreateCategoryRequestDTO;
 import com.nasa.stocktrack.interfaces.dtos.ListCategoryResponseDTO;
+import com.nasa.stocktrack.interfaces.dtos.UpdateCategoryRequestDTO;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
@@ -30,6 +32,7 @@ public class CategoryController {
     private final CreateCategoryUseCase createCategoryUseCase;
     private final ShowCategoryUseCase showCategoryUseCase;
     private final ListCategoryUseCase listCategoryUseCase;
+    private final UpdateCategoryUseCase updateCategoryUseCase;
 
     @GetMapping
     public ResponseEntity<ListCategoryResponseDTO> list(
@@ -58,5 +61,17 @@ public class CategoryController {
         URI uri = ResourceURIHelper.getURI(category.getId());
 
         return ResponseEntity.created(uri).body(CategoryDTO.toResponse(category));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(
+            @ValidUUID @PathVariable String id,
+            @RequestBody @Validated UpdateCategoryRequestDTO updateCategoryRequestDTO
+    ) {
+        Category category = UpdateCategoryRequestDTO.toDomain(UUID.fromString(id), updateCategoryRequestDTO);
+
+        updateCategoryUseCase.execute(category);
+
+        return ResponseEntity.noContent().build();
     }
 }
