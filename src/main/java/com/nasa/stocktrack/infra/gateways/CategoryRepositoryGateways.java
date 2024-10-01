@@ -67,4 +67,11 @@ public class CategoryRepositoryGateways implements CategoryGateway {
 
         categoryRepository.save(categoryEntity);
     }
+
+    @Override
+    public void delete(Category category) {
+        CategoryEntity categoryEntity = categoryMapper.toEntity(category);
+
+        categoryRepository.delete(categoryEntity);
+    }
 }

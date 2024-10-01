@@ -17,5 +17,7 @@ public interface CategoryGateway {
     Category findById(UUID id);
 
     void update(Category category);
+
+    void delete(Category category);
 }
 

@@ -1,9 +1,6 @@
 package com.nasa.stocktrack.interfaces.controllers;
 
-import com.nasa.stocktrack.application.usecases.category.CreateCategoryUseCase;
-import com.nasa.stocktrack.application.usecases.category.ListCategoryUseCase;
-import com.nasa.stocktrack.application.usecases.category.ShowCategoryUseCase;
-import com.nasa.stocktrack.application.usecases.category.UpdateCategoryUseCase;
+import com.nasa.stocktrack.application.usecases.category.*;
 import com.nasa.stocktrack.domain.entities.Category;
 import com.nasa.stocktrack.domain.entities.ListCategory;
 import com.nasa.stocktrack.domain.enums.OrderByEnum;
@@ -33,6 +30,7 @@ public class CategoryController {
     private final ShowCategoryUseCase showCategoryUseCase;
     private final ListCategoryUseCase listCategoryUseCase;
     private final UpdateCategoryUseCase updateCategoryUseCase;
+    private final DeleteCategoryUseCase deleteCategoryUseCase;
 
     @GetMapping
     public ResponseEntity<ListCategoryResponseDTO> list(
@@ -71,6 +69,13 @@ public class CategoryController {
         Category category = UpdateCategoryRequestDTO.toDomain(UUID.fromString(id), updateCategoryRequestDTO);
 
         updateCategoryUseCase.execute(category);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@ValidUUID @PathVariable String id) {
+        deleteCategoryUseCase.execute(UUID.fromString(id));
 
         return ResponseEntity.noContent().build();
     }
