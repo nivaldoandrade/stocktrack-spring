@@ -1,0 +1,1 @@
+ALTER DATABASE ${db_name} SET TIMEZONE TO '${db_timezone}';
