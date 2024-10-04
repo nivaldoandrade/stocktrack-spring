@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS warehouse(
+    id UUID NOT NULL UNIQUE DEFAULT uuid_generate_v4(),
+    name VARCHAR UNIQUE NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TRIGGER warehouse_update_updated_at
+BEFORE UPDATE ON warehouse
+FOR EACH ROW EXECUTE FUNCTION set_updated_at_trigger();
