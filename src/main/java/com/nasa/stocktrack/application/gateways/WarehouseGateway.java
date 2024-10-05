@@ -17,4 +17,6 @@ public interface WarehouseGateway {
     Warehouse findById(UUID id);
 
     void update(Warehouse warehouse);
+
+    void delete(Warehouse warehouse);
 }

@@ -1,10 +1,8 @@
 package com.nasa.stocktrack.infra.config;
 
 import com.nasa.stocktrack.application.gateways.WarehouseGateway;
-import com.nasa.stocktrack.application.usecases.warehouse.CreateWarehouseUseCase;
-import com.nasa.stocktrack.application.usecases.warehouse.ListWarehouseUseCase;
-import com.nasa.stocktrack.application.usecases.warehouse.ShowWarehouseUseCase;
-import com.nasa.stocktrack.application.usecases.warehouse.UpdateWarehouseUseCase;
+import com.nasa.stocktrack.application.usecases.warehouse.*;
+import org.hibernate.sql.Delete;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -32,5 +30,13 @@ public class WarehouseDependencyInjection {
             ShowWarehouseUseCase showWarehouseUseCase
     ) {
         return new UpdateWarehouseUseCase(warehouseGateway, showWarehouseUseCase);
+    }
+
+    @Bean
+    DeleteWarehouseUseCase deleteWarehouseUseCase(
+            WarehouseGateway warehouseGateway,
+            ShowWarehouseUseCase showWarehouseUseCase
+    ) {
+        return new DeleteWarehouseUseCase(warehouseGateway, showWarehouseUseCase);
     }
 }

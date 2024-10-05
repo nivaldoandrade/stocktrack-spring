@@ -1,9 +1,6 @@
 package com.nasa.stocktrack.interfaces.controllers;
 
-import com.nasa.stocktrack.application.usecases.warehouse.CreateWarehouseUseCase;
-import com.nasa.stocktrack.application.usecases.warehouse.ListWarehouseUseCase;
-import com.nasa.stocktrack.application.usecases.warehouse.ShowWarehouseUseCase;
-import com.nasa.stocktrack.application.usecases.warehouse.UpdateWarehouseUseCase;
+import com.nasa.stocktrack.application.usecases.warehouse.*;
 import com.nasa.stocktrack.domain.dtos.PaginatedList;
 import com.nasa.stocktrack.domain.entities.Warehouse;
 import com.nasa.stocktrack.domain.enums.OrderByEnum;
@@ -33,6 +30,7 @@ public class WarehouseController {
     private final ShowWarehouseUseCase showWarehouseUseCase;
     private final ListWarehouseUseCase listWarehouseUseCase;
     private final UpdateWarehouseUseCase updateWarehouseUseCase;
+    private final DeleteWarehouseUseCase deleteWarehouseUseCase;
 
     @GetMapping
     public ResponseEntity<ListWarehouseResponseDTO> list(
@@ -76,6 +74,14 @@ public class WarehouseController {
         Warehouse warehouse = UpdateWarehouseRequestDTO.toDomain(UUID.fromString(id), updateWarehouseRequestDTO);
 
         updateWarehouseUseCase.execute(warehouse);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@ValidUUID @PathVariable String id) {
+
+        deleteWarehouseUseCase.execute(UUID.fromString(id));
 
         return ResponseEntity.noContent().build();
     }

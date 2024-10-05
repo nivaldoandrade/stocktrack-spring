@@ -76,4 +76,11 @@ public class WarehouseRepositoryGateways implements WarehouseGateway {
 
         warehouseRepository.save(warehouseEntity);
     }
+
+    @Override
+    public void delete(Warehouse warehouse) {
+        WarehouseEntity warehouseEntity = warehouseMapper.toEntity(warehouse);
+
+        warehouseRepository.delete(warehouseEntity);
+    }
 }
