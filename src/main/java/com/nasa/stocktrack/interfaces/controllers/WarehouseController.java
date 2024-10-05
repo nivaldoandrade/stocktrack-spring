@@ -57,7 +57,7 @@ public class WarehouseController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody @Validated CreateWarehouseDTO createWarehouseDTO) {
+    public ResponseEntity<WarehouseDTO> create(@RequestBody @Validated CreateWarehouseDTO createWarehouseDTO) {
 
         Warehouse warehouse = createWarehouseUseCase.execute(CreateWarehouseDTO.toDomain(createWarehouseDTO));
 
