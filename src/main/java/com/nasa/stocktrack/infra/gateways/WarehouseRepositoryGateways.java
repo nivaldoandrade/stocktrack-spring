@@ -7,6 +7,7 @@ import com.nasa.stocktrack.infra.persistence.repositories.WarehouseRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Component
 public class WarehouseRepositoryGateways implements WarehouseGateway {
@@ -35,6 +36,13 @@ public class WarehouseRepositoryGateways implements WarehouseGateway {
     @Override
     public Warehouse findByName(String name) {
         Optional<WarehouseEntity> warehouseEntity = warehouseRepository.findByName(name);
+
+        return warehouseEntity.map(warehouseMapper::toDomain).orElse(null);
+    }
+
+    @Override
+    public Warehouse findById(UUID id) {
+        Optional<WarehouseEntity> warehouseEntity = warehouseRepository.findById(id);
 
         return warehouseEntity.map(warehouseMapper::toDomain).orElse(null);
     }
