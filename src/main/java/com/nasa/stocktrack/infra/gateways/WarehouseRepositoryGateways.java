@@ -40,10 +40,6 @@ public class WarehouseRepositoryGateways implements WarehouseGateway {
 
         Page<WarehouseEntity> warehouseEntities = warehouseRepository.findAll(search, pageable);
 
-        for(WarehouseEntity w: warehouseEntities) {
-            System.out.println(w.getName());
-        }
-
         return warehouseMapper.toListDomain(warehouseEntities);
     }
 
