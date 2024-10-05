@@ -35,7 +35,7 @@ public class WarehouseController {
     @GetMapping
     public ResponseEntity<ListWarehouseResponseDTO> list(
             @RequestParam(name = "page", defaultValue = "0") @Min(0) Integer page,
-            @RequestParam(name = "size", defaultValue = "10") @Max(10) Integer size,
+            @RequestParam(name = "size", defaultValue = "10") @Min(1) @Max(10) Integer size,
             @RequestParam(name = "orderBy", defaultValue = "asc") @EnumOrderByPattern String orderBy,
             @RequestParam(required = false) String search
     ) {
