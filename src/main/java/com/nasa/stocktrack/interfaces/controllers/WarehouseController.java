@@ -3,6 +3,7 @@ package com.nasa.stocktrack.interfaces.controllers;
 import com.nasa.stocktrack.application.usecases.warehouse.CreateWarehouseUseCase;
 import com.nasa.stocktrack.application.usecases.warehouse.ListWarehouseUseCase;
 import com.nasa.stocktrack.application.usecases.warehouse.ShowWarehouseUseCase;
+import com.nasa.stocktrack.application.usecases.warehouse.UpdateWarehouseUseCase;
 import com.nasa.stocktrack.domain.dtos.PaginatedList;
 import com.nasa.stocktrack.domain.entities.Warehouse;
 import com.nasa.stocktrack.domain.enums.OrderByEnum;
@@ -11,6 +12,7 @@ import com.nasa.stocktrack.infra.constraints.ValidUUID;
 import com.nasa.stocktrack.interfaces.ResourceURIHelper;
 import com.nasa.stocktrack.interfaces.dtos.warehouse.CreateWarehouseDTO;
 import com.nasa.stocktrack.interfaces.dtos.warehouse.ListWarehouseResponseDTO;
+import com.nasa.stocktrack.interfaces.dtos.warehouse.UpdateWarehouseRequestDTO;
 import com.nasa.stocktrack.interfaces.dtos.warehouse.WarehouseDTO;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -30,6 +32,7 @@ public class WarehouseController {
     private final CreateWarehouseUseCase createWarehouseUseCase;
     private final ShowWarehouseUseCase showWarehouseUseCase;
     private final ListWarehouseUseCase listWarehouseUseCase;
+    private final UpdateWarehouseUseCase updateWarehouseUseCase;
 
     @GetMapping
     public ResponseEntity<ListWarehouseResponseDTO> list(
@@ -63,5 +66,17 @@ public class WarehouseController {
         URI uri = ResourceURIHelper.getURI(warehouse.getId());
 
         return ResponseEntity.created(uri).body(WarehouseDTO.toResponse(warehouse));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> update(
+            @ValidUUID @PathVariable String id,
+            @RequestBody @Validated UpdateWarehouseRequestDTO updateWarehouseRequestDTO
+    ) {
+        Warehouse warehouse = UpdateWarehouseRequestDTO.toDomain(UUID.fromString(id), updateWarehouseRequestDTO);
+
+        updateWarehouseUseCase.execute(warehouse);
+
+        return ResponseEntity.noContent().build();
     }
 }

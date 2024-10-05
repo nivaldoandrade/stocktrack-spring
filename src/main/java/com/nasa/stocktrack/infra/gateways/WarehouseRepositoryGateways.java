@@ -69,4 +69,11 @@ public class WarehouseRepositoryGateways implements WarehouseGateway {
 
         return warehouseEntity.map(warehouseMapper::toDomain).orElse(null);
     }
+
+    @Override
+    public void update(Warehouse warehouse) {
+        WarehouseEntity warehouseEntity = warehouseMapper.toEntity(warehouse);
+
+        warehouseRepository.save(warehouseEntity);
+    }
 }

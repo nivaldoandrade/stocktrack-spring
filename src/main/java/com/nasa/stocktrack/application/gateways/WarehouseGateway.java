@@ -15,4 +15,6 @@ public interface WarehouseGateway {
     Warehouse findByName(String name);
 
     Warehouse findById(UUID id);
+
+    void update(Warehouse warehouse);
 }
