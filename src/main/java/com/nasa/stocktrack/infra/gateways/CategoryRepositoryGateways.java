@@ -1,8 +1,8 @@
 package com.nasa.stocktrack.infra.gateways;
 
 import com.nasa.stocktrack.application.gateways.CategoryGateway;
+import com.nasa.stocktrack.domain.dtos.PaginatedList;
 import com.nasa.stocktrack.domain.entities.Category;
-import com.nasa.stocktrack.domain.entities.ListCategory;
 import com.nasa.stocktrack.domain.enums.OrderByEnum;
 import com.nasa.stocktrack.infra.persistence.entities.CategoryEntity;
 import com.nasa.stocktrack.infra.persistence.repositories.CategoryRepository;
@@ -27,7 +27,7 @@ public class CategoryRepositoryGateways implements CategoryGateway {
     }
 
     @Override
-    public ListCategory list(Integer page, Integer size, OrderByEnum orderBy, String search) {
+    public PaginatedList<Category> list(Integer page, Integer size, OrderByEnum orderBy, String search) {
         Sort.Direction direction = "desc".equalsIgnoreCase(orderBy.name())
             ? Sort.Direction.DESC
             : Sort.Direction.ASC;

@@ -1,6 +1,7 @@
 package com.nasa.stocktrack.interfaces.dtos;
 
-import com.nasa.stocktrack.domain.entities.ListCategory;
+import com.nasa.stocktrack.domain.dtos.PaginatedList;
+import com.nasa.stocktrack.domain.entities.Category;
 import lombok.Builder;
 
 import java.util.List;
@@ -14,13 +15,13 @@ public record ListCategoryResponseDTO(
         Integer totalPages
 ) {
 
-    public static ListCategoryResponseDTO toResponse(ListCategory listCategory) {
-        List<CategoryDTO> categories = listCategory.getCategories().stream().map(CategoryDTO::toResponse).toList();
+    public static ListCategoryResponseDTO toResponse(PaginatedList<Category> categoryPaginatedList) {
+        List<CategoryDTO> categories = categoryPaginatedList.getItems().stream().map(CategoryDTO::toResponse).toList();
 
         return ListCategoryResponseDTO.builder()
                 .categories(categories)
-                .totalItems(listCategory.getTotalItems())
-                .totalPages(listCategory.getTotalPages())
+                .totalItems(categoryPaginatedList.getTotalItems())
+                .totalPages(categoryPaginatedList.getTotalPages())
                 .build();
     }
 }

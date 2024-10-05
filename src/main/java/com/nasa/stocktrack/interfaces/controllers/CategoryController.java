@@ -1,8 +1,8 @@
 package com.nasa.stocktrack.interfaces.controllers;
 
 import com.nasa.stocktrack.application.usecases.category.*;
+import com.nasa.stocktrack.domain.dtos.PaginatedList;
 import com.nasa.stocktrack.domain.entities.Category;
-import com.nasa.stocktrack.domain.entities.ListCategory;
 import com.nasa.stocktrack.domain.enums.OrderByEnum;
 import com.nasa.stocktrack.infra.constraints.EnumOrderByPattern;
 import com.nasa.stocktrack.infra.constraints.ValidUUID;
@@ -39,9 +39,14 @@ public class CategoryController {
             @RequestParam(name = "orderBy", defaultValue = "asc") @EnumOrderByPattern String orderBy,
             @RequestParam(required = false) String search
     ) {
-        ListCategory listCategory = listCategoryUseCase.execute(page, size, OrderByEnum.fromString(orderBy), search);
+        PaginatedList<Category> categoryPaginatedList = listCategoryUseCase.execute(
+                page,
+                size,
+                OrderByEnum.fromString(orderBy),
+                search
+        );
 
-        return ResponseEntity.ok(ListCategoryResponseDTO.toResponse(listCategory));
+        return ResponseEntity.ok(ListCategoryResponseDTO.toResponse(categoryPaginatedList));
     }
 
     @GetMapping("/{id}")
