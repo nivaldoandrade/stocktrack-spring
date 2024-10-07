@@ -7,6 +7,7 @@ import com.nasa.stocktrack.infra.persistence.repositories.ProductRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Component
 public class ProductRepositoryGateways implements ProductGateway {
@@ -39,6 +40,13 @@ public class ProductRepositoryGateways implements ProductGateway {
     @Override
     public Product findByCode(String code) {
         Optional<ProductEntity> productEntity = productRepository.findByCode(code);
+
+        return productEntity.map(productMapper::toDomain).orElse(null);
+    }
+
+    @Override
+    public Product findById(UUID id) {
+        Optional<ProductEntity> productEntity = productRepository.findById(id);
 
         return productEntity.map(productMapper::toDomain).orElse(null);
     }
