@@ -11,6 +11,10 @@ public class Category {
         return id;
     }
 
+    public Category(UUID id) {
+        this.id = id;
+    }
+
     public Category(String name) {
         this.name = name;
     }
