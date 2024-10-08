@@ -1,10 +1,14 @@
 package com.nasa.stocktrack.infra.gateways;
 
+import com.nasa.stocktrack.domain.dtos.PaginatedList;
 import com.nasa.stocktrack.domain.entities.Category;
 import com.nasa.stocktrack.domain.entities.Product;
 import com.nasa.stocktrack.infra.persistence.entities.CategoryEntity;
 import com.nasa.stocktrack.infra.persistence.entities.ProductEntity;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class ProductMapper {
@@ -36,6 +40,16 @@ public class ProductMapper {
                 productEntity.getCode(),
                 productEntity.getBrand(),
                 category
+        );
+    }
+
+    PaginatedList<Product> toListDomain(Page<ProductEntity> productEntities) {
+        List<Product> products = productEntities.map(this::toDomain).toList();
+
+        return new PaginatedList<Product>(
+                products,
+                productEntities.getTotalElements(),
+                productEntities.getTotalPages()
         );
     }
 }

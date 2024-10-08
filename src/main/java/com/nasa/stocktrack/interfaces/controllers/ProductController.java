@@ -1,12 +1,18 @@
 package com.nasa.stocktrack.interfaces.controllers;
 
 import com.nasa.stocktrack.application.usecases.product.CreateProductUseCase;
+import com.nasa.stocktrack.application.usecases.product.ListProductUseCase;
 import com.nasa.stocktrack.application.usecases.product.ShowProductUseCase;
+import com.nasa.stocktrack.domain.dtos.PaginatedList;
 import com.nasa.stocktrack.domain.entities.Product;
+import com.nasa.stocktrack.infra.constraints.EnumOrderByPattern;
 import com.nasa.stocktrack.infra.constraints.ValidUUID;
 import com.nasa.stocktrack.interfaces.ResourceURIHelper;
 import com.nasa.stocktrack.interfaces.dtos.product.CreateProductRequestDTO;
+import com.nasa.stocktrack.interfaces.dtos.product.ListProductResponseDTO;
 import com.nasa.stocktrack.interfaces.dtos.product.ProductDTO;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -22,6 +28,20 @@ public class ProductController {
 
     private final CreateProductUseCase createProductUseCase;
     private final ShowProductUseCase showProductUseCase;
+    private final ListProductUseCase listProductUseCase;
+
+    @GetMapping
+    public ResponseEntity<ListProductResponseDTO> list(
+            @RequestParam(name = "page", defaultValue = "0") @Min(0) Integer page,
+            @RequestParam(name = "size", defaultValue = "10") @Min(1) @Max(10) Integer size,
+            @RequestParam(name = "orderBy", defaultValue = "asc") @EnumOrderByPattern String orderBy,
+            @RequestParam(required = false) String search
+    ) {
+
+        PaginatedList<Product> productPaginatedList = listProductUseCase.execute(page, size, orderBy, search);
+
+        return ResponseEntity.ok(ListProductResponseDTO.toResponse(productPaginatedList));
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductDTO> show(@ValidUUID @PathVariable String id) {

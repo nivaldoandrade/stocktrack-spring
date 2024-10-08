@@ -1,10 +1,13 @@
 package com.nasa.stocktrack.application.gateways;
 
+import com.nasa.stocktrack.domain.dtos.PaginatedList;
 import com.nasa.stocktrack.domain.entities.Product;
 
 import java.util.UUID;
 
 public interface ProductGateway {
+
+    PaginatedList<Product> list(Integer page, Integer size, String orderBy, String search);
 
     Product create(Product product);
 
