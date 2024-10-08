@@ -16,4 +16,6 @@ public interface ProductGateway {
     Product findByCode(String code);
 
     Product findById(UUID id);
+
+    void update(Product product);
 }

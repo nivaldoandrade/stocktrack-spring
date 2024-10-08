@@ -49,6 +49,18 @@ public class Product {
         return category;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
     public void setCategory(Category category) {
         this.category = category;
     }

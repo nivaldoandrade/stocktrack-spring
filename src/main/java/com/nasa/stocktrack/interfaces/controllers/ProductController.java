@@ -3,6 +3,7 @@ package com.nasa.stocktrack.interfaces.controllers;
 import com.nasa.stocktrack.application.usecases.product.CreateProductUseCase;
 import com.nasa.stocktrack.application.usecases.product.ListProductUseCase;
 import com.nasa.stocktrack.application.usecases.product.ShowProductUseCase;
+import com.nasa.stocktrack.application.usecases.product.UpdateProductUseCase;
 import com.nasa.stocktrack.domain.dtos.PaginatedList;
 import com.nasa.stocktrack.domain.entities.Product;
 import com.nasa.stocktrack.infra.constraints.EnumOrderByPattern;
@@ -11,6 +12,7 @@ import com.nasa.stocktrack.interfaces.ResourceURIHelper;
 import com.nasa.stocktrack.interfaces.dtos.product.CreateProductRequestDTO;
 import com.nasa.stocktrack.interfaces.dtos.product.ListProductResponseDTO;
 import com.nasa.stocktrack.interfaces.dtos.product.ProductDTO;
+import com.nasa.stocktrack.interfaces.dtos.product.UpdateProductRequestDTO;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
@@ -29,6 +31,7 @@ public class ProductController {
     private final CreateProductUseCase createProductUseCase;
     private final ShowProductUseCase showProductUseCase;
     private final ListProductUseCase listProductUseCase;
+    private final UpdateProductUseCase updateProductUseCase;
 
     @GetMapping
     public ResponseEntity<ListProductResponseDTO> list(
@@ -56,5 +59,19 @@ public class ProductController {
         URI uri = ResourceURIHelper.getURI(product.getId());
 
         return ResponseEntity.created(uri).body(ProductDTO.toResponse(product));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> update(
+            @ValidUUID @PathVariable String id,
+            @RequestBody @Validated UpdateProductRequestDTO updateProductRequestDTO
+    ) {
+
+        updateProductUseCase.execute(UpdateProductRequestDTO.toDomain(
+                UUID.fromString(id),
+                updateProductRequestDTO
+        ));
+
+        return ResponseEntity.noContent().build();
     }
 }

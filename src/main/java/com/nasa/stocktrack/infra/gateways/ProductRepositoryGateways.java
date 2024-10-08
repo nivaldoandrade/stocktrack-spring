@@ -74,4 +74,11 @@ public class ProductRepositoryGateways implements ProductGateway {
 
         return productEntity.map(productMapper::toDomain).orElse(null);
     }
+
+    @Override
+    public void update(Product product) {
+        ProductEntity productEntity = productMapper.toEntity(product);
+
+        productRepository.save(productEntity);
+    }
 }
