@@ -2,6 +2,7 @@ package com.nasa.stocktrack.infra.exceptions;
 
 
 import com.nasa.stocktrack.domain.exceptions.EntityExistsException;
+import com.nasa.stocktrack.domain.exceptions.EntityInUseException;
 import com.nasa.stocktrack.domain.exceptions.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,19 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<RestErrorResponse> handleEntityNotFoundException(EntityNotFoundException e) {
         int status = HttpStatus.NOT_FOUND.value();
+
+        RestErrorResponse error = new RestErrorResponse(
+                status,
+                e.getMessage(),
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(status).body(error);
+    }
+
+    @ExceptionHandler(EntityInUseException.class)
+    public ResponseEntity<RestErrorResponse> handleEntityInUseException(EntityInUseException e) {
+        int status = HttpStatus.UNPROCESSABLE_ENTITY.value();
 
         RestErrorResponse error = new RestErrorResponse(
                 status,

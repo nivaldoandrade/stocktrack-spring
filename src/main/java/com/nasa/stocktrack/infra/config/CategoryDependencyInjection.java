@@ -1,6 +1,7 @@
 package com.nasa.stocktrack.infra.config;
 
 import com.nasa.stocktrack.application.gateways.CategoryGateway;
+import com.nasa.stocktrack.application.gateways.ProductGateway;
 import com.nasa.stocktrack.application.usecases.category.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,7 +30,7 @@ public class CategoryDependencyInjection {
     }
 
     @Bean
-    DeleteCategoryUseCase deleteCategoryUseCase(CategoryGateway categoryGateway) {
-        return new DeleteCategoryUseCase(categoryGateway);
+    DeleteCategoryUseCase deleteCategoryUseCase(CategoryGateway categoryGateway, ProductGateway productGateway) {
+        return new DeleteCategoryUseCase(categoryGateway, productGateway);
     }
 }

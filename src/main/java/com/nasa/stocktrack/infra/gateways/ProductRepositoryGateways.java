@@ -76,6 +76,13 @@ public class ProductRepositoryGateways implements ProductGateway {
     }
 
     @Override
+    public Product findFirstByCategoryId(UUID categoryId) {
+       Optional<ProductEntity> productEntity = productRepository.findFirstByCategoryId(categoryId);
+
+        return productEntity.map(productMapper::toDomain).orElse(null);
+    }
+
+    @Override
     public void update(Product product) {
         ProductEntity productEntity = productMapper.toEntity(product);
 

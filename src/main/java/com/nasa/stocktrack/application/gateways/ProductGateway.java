@@ -17,6 +17,8 @@ public interface ProductGateway {
 
     Product findById(UUID id);
 
+    Product findFirstByCategoryId(UUID categoryId);
+
     void update(Product product);
 
     void delete(Product product);
