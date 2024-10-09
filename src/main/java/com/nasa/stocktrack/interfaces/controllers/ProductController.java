@@ -1,9 +1,6 @@
 package com.nasa.stocktrack.interfaces.controllers;
 
-import com.nasa.stocktrack.application.usecases.product.CreateProductUseCase;
-import com.nasa.stocktrack.application.usecases.product.ListProductUseCase;
-import com.nasa.stocktrack.application.usecases.product.ShowProductUseCase;
-import com.nasa.stocktrack.application.usecases.product.UpdateProductUseCase;
+import com.nasa.stocktrack.application.usecases.product.*;
 import com.nasa.stocktrack.domain.dtos.PaginatedList;
 import com.nasa.stocktrack.domain.entities.Product;
 import com.nasa.stocktrack.infra.constraints.EnumOrderByPattern;
@@ -32,6 +29,7 @@ public class ProductController {
     private final ShowProductUseCase showProductUseCase;
     private final ListProductUseCase listProductUseCase;
     private final UpdateProductUseCase updateProductUseCase;
+    private final DeleteProductUseCase deleteProductUseCase;
 
     @GetMapping
     public ResponseEntity<ListProductResponseDTO> list(
@@ -71,6 +69,13 @@ public class ProductController {
                 UUID.fromString(id),
                 updateProductRequestDTO
         ));
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@ValidUUID @PathVariable String id) {
+        deleteProductUseCase.execute(UUID.fromString(id));
 
         return ResponseEntity.noContent().build();
     }

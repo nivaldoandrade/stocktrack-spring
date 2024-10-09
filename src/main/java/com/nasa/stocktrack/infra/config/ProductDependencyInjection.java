@@ -3,10 +3,7 @@ package com.nasa.stocktrack.infra.config;
 import com.nasa.stocktrack.application.gateways.ProductGateway;
 import com.nasa.stocktrack.application.services.ProductService;
 import com.nasa.stocktrack.application.usecases.category.ShowCategoryUseCase;
-import com.nasa.stocktrack.application.usecases.product.CreateProductUseCase;
-import com.nasa.stocktrack.application.usecases.product.ListProductUseCase;
-import com.nasa.stocktrack.application.usecases.product.ShowProductUseCase;
-import com.nasa.stocktrack.application.usecases.product.UpdateProductUseCase;
+import com.nasa.stocktrack.application.usecases.product.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -38,6 +35,11 @@ public class ProductDependencyInjection {
             ShowCategoryUseCase showCategoryUseCase
     ) {
         return new UpdateProductUseCase(productGateway, productService, showCategoryUseCase);
+    }
+
+    @Bean
+    DeleteProductUseCase deleteProductUseCase(ProductGateway productGateway) {
+        return new DeleteProductUseCase(productGateway);
     }
 
     @Bean

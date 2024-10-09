@@ -81,4 +81,11 @@ public class ProductRepositoryGateways implements ProductGateway {
 
         productRepository.save(productEntity);
     }
+
+    @Override
+    public void delete(Product product) {
+        ProductEntity productEntity = productMapper.toEntity(product);
+
+        productRepository.delete(productEntity);
+    }
 }

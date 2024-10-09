@@ -18,4 +18,6 @@ public interface ProductGateway {
     Product findById(UUID id);
 
     void update(Product product);
+
+    void delete(Product product);
 }
