@@ -1,9 +1,12 @@
 package com.nasa.stocktrack.infra.config;
 
 import com.nasa.stocktrack.application.gateways.ProductGateway;
+import com.nasa.stocktrack.application.gateways.ProductWarehouseGateway;
 import com.nasa.stocktrack.application.services.ProductService;
+import com.nasa.stocktrack.application.services.ProductWarehouseService;
 import com.nasa.stocktrack.application.usecases.category.ShowCategoryUseCase;
 import com.nasa.stocktrack.application.usecases.product.*;
+import jakarta.transaction.Transactional;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,11 +14,14 @@ import org.springframework.context.annotation.Configuration;
 public class ProductDependencyInjection {
 
     @Bean
+    @Transactional
     CreateProductUseCase createProductUseCase(
             ProductGateway productGateway,
-            ShowCategoryUseCase showCategoryUseCase
+            ShowCategoryUseCase showCategoryUseCase,
+            ProductWarehouseService productWarehouseService,
+            ProductWarehouseGateway productWarehouseGateway
     ) {
-        return new CreateProductUseCase(productGateway, showCategoryUseCase);
+        return new CreateProductUseCase(productGateway, showCategoryUseCase, productWarehouseService, productWarehouseGateway);
     }
 
     @Bean

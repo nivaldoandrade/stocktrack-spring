@@ -1,6 +1,7 @@
 package com.nasa.stocktrack.infra.exceptions;
 
 
+import com.nasa.stocktrack.domain.exceptions.DuplicateWarehouseIdException;
 import com.nasa.stocktrack.domain.exceptions.EntityExistsException;
 import com.nasa.stocktrack.domain.exceptions.EntityInUseException;
 import com.nasa.stocktrack.domain.exceptions.EntityNotFoundException;
@@ -19,6 +20,20 @@ import java.util.Objects;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(DuplicateWarehouseIdException.class)
+    public ResponseEntity<RestErrorResponseWithErrors> handleDuplicateWarehouseIdException(DuplicateWarehouseIdException e) {
+        int statusCode = HttpStatus.BAD_REQUEST.value();
+
+        List<ApiError> apiErrors = List.of(new ApiError(e.getPointer(), e.getReason()));
+        RestErrorResponseWithErrors error = new RestErrorResponseWithErrors(
+                statusCode,
+                apiErrors,
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(statusCode).body(error);
+    }
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<RestErrorResponse> handleEntityNotFoundException(EntityNotFoundException e) {

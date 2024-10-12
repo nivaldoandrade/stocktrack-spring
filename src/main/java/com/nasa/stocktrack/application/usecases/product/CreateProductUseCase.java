@@ -1,10 +1,16 @@
 package com.nasa.stocktrack.application.usecases.product;
 
 import com.nasa.stocktrack.application.gateways.ProductGateway;
+import com.nasa.stocktrack.application.gateways.ProductWarehouseGateway;
+import com.nasa.stocktrack.application.services.ProductWarehouseService;
 import com.nasa.stocktrack.application.usecases.category.ShowCategoryUseCase;
 import com.nasa.stocktrack.domain.entities.Category;
 import com.nasa.stocktrack.domain.entities.Product;
+import com.nasa.stocktrack.domain.entities.ProductWarehouse;
 import com.nasa.stocktrack.domain.exceptions.ProductExistsException;
+import jakarta.transaction.Transactional;
+
+import java.util.List;
 
 public class CreateProductUseCase {
 
@@ -12,14 +18,23 @@ public class CreateProductUseCase {
 
     private final ShowCategoryUseCase showCategoryUseCase;
 
+    private final ProductWarehouseService productWarehouseService;
+
+    private final ProductWarehouseGateway productWarehouseGateway;
+
     public CreateProductUseCase(
             ProductGateway productGateway,
-            ShowCategoryUseCase showCategoryUseCase
+            ShowCategoryUseCase showCategoryUseCase,
+            ProductWarehouseService productWarehouseService,
+            ProductWarehouseGateway productWarehouseGateway
     ) {
         this.productGateway = productGateway;
         this.showCategoryUseCase = showCategoryUseCase;
+        this.productWarehouseService = productWarehouseService;
+        this.productWarehouseGateway = productWarehouseGateway;
     }
 
+    @Transactional
     public Product execute(Product product) {
         Product productByNameExisting = productGateway.findByName(product.getName());
 
@@ -37,6 +52,17 @@ public class CreateProductUseCase {
 
         product.setCategory(category);
 
-        return productGateway.create(product);
+        Product newProduct =  productGateway.create(product);
+
+        List<ProductWarehouse> productWarehouses = productWarehouseService.mapToProductWarehouses(
+                product.getProductWarehouses(),
+                newProduct
+        );
+
+        productWarehouses =  productWarehouseGateway.saveAll(productWarehouses);
+
+        newProduct.setProductWarehouses(productWarehouses);
+
+        return newProduct;
     }
 }
