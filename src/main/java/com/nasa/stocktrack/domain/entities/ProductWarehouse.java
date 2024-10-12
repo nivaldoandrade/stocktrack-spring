@@ -10,6 +10,11 @@ public class ProductWarehouse {
 
     private String location;
 
+    public ProductWarehouse(Product product, Warehouse warehouse) {
+        this.id.setProduct(product);
+        this.id.setWarehouse(warehouse);
+    }
+
     public ProductWarehouse(Product product, Warehouse warehouse, Integer quantity, String location) {
         this.id.setProduct(product);
         this.id.setWarehouse(warehouse);

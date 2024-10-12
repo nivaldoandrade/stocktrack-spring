@@ -18,6 +18,10 @@ public class Product {
 
     private List<ProductWarehouse> productWarehouses = new ArrayList<>();
 
+    public Product(UUID id) {
+        this.id = id;
+    }
+
     public Product(UUID id, String name, String code, String brand, Category category, List<ProductWarehouse> productWarehouses) {
         this.id = id;
         this.name = name;

@@ -5,6 +5,7 @@ import com.nasa.stocktrack.application.gateways.WarehouseGateway;
 import com.nasa.stocktrack.application.services.ProductWarehouseService;
 import com.nasa.stocktrack.application.usecases.product.ShowProductUseCase;
 import com.nasa.stocktrack.application.usecases.productWarehouse.CreateOrUpdateProductWarehouseUseCase;
+import com.nasa.stocktrack.application.usecases.productWarehouse.DeleteProductWarehouseUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -27,5 +28,10 @@ public class ProductWarehouseDependencyInjection {
                 showProductUseCase,
                 productWarehouseService
         );
+    }
+
+    @Bean
+    DeleteProductWarehouseUseCase deleteProductWarehouseUseCase(ProductWarehouseGateway productWarehouseGateway) {
+        return new DeleteProductWarehouseUseCase(productWarehouseGateway);
     }
 }

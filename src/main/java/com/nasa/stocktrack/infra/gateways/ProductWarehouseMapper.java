@@ -1,5 +1,6 @@
 package com.nasa.stocktrack.infra.gateways;
 
+import com.nasa.stocktrack.domain.entities.Product;
 import com.nasa.stocktrack.domain.entities.ProductWarehouse;
 import com.nasa.stocktrack.domain.entities.Warehouse;
 import com.nasa.stocktrack.infra.persistence.entities.ProductEntity;
@@ -8,6 +9,7 @@ import com.nasa.stocktrack.infra.persistence.entities.WarehouseEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.UUID;
 
 @Component
 public class ProductWarehouseMapper {
@@ -40,6 +42,19 @@ public class ProductWarehouseMapper {
                 warehouse,
                 productWarehouseEntity.getQuantity(),
                 productWarehouseEntity.getLocation()
+        );
+    }
+
+    public ProductWarehouse toDomainOnlyProductWarehouseIds(
+            UUID productId,
+            UUID warehouseId
+    ) {
+        Product product = new Product(productId);
+        Warehouse warehouse = new Warehouse(warehouseId);
+
+        return new ProductWarehouse(
+                product,
+                warehouse
         );
     }
 
