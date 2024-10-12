@@ -1,8 +1,10 @@
 package com.nasa.stocktrack.interfaces.controllers;
 
 import com.nasa.stocktrack.application.usecases.product.*;
+import com.nasa.stocktrack.application.usecases.productWarehouse.CreateOrUpdateProductWarehouseUseCase;
 import com.nasa.stocktrack.domain.dtos.PaginatedList;
 import com.nasa.stocktrack.domain.entities.Product;
+import com.nasa.stocktrack.domain.entities.ProductWarehouse;
 import com.nasa.stocktrack.infra.constraints.EnumOrderByPattern;
 import com.nasa.stocktrack.infra.constraints.ValidUUID;
 import com.nasa.stocktrack.interfaces.ResourceURIHelper;
@@ -10,6 +12,7 @@ import com.nasa.stocktrack.interfaces.dtos.product.CreateProductRequestDTO;
 import com.nasa.stocktrack.interfaces.dtos.product.ListProductResponseDTO;
 import com.nasa.stocktrack.interfaces.dtos.product.ProductDTO;
 import com.nasa.stocktrack.interfaces.dtos.product.UpdateProductRequestDTO;
+import com.nasa.stocktrack.interfaces.dtos.productWarehouse.ListCreateOrUpdateProductWarehouseRequestDTO;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
@@ -18,6 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -30,6 +34,7 @@ public class ProductController {
     private final ListProductUseCase listProductUseCase;
     private final UpdateProductUseCase updateProductUseCase;
     private final DeleteProductUseCase deleteProductUseCase;
+    private final CreateOrUpdateProductWarehouseUseCase createOrUpdateProductWarehouseUseCase;
 
     @GetMapping
     public ResponseEntity<ListProductResponseDTO> list(
@@ -69,6 +74,21 @@ public class ProductController {
                 UUID.fromString(id),
                 updateProductRequestDTO
         ));
+
+        return ResponseEntity.noContent().build();
+    }
+
+
+    @PatchMapping("/{productId}/warehouses")
+    public ResponseEntity<Void> createOrUpdateProductWarehouse(
+            @ValidUUID @PathVariable String productId,
+            @RequestBody @Validated ListCreateOrUpdateProductWarehouseRequestDTO request
+    ) {
+        List<ProductWarehouse> warehouses = ListCreateOrUpdateProductWarehouseRequestDTO.toDomain(
+                request
+        );
+
+        createOrUpdateProductWarehouseUseCase.execute(UUID.fromString(productId), warehouses);
 
         return ResponseEntity.noContent().build();
     }
