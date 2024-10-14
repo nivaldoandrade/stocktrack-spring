@@ -17,4 +17,8 @@ public interface ProductWarehouseRepository extends JpaRepository<ProductWarehou
     )
     Optional<ProductWarehouseEntity> findByProductIdAndWarehouseId(UUID productId, UUID warehouseId);
 
+
+    @Query(value = "SELECT * FROM product_warehouse pw " +
+            "WHERE pw.warehouse_id = :warehouseId LIMIT 1", nativeQuery = true)
+    Optional<ProductWarehouseEntity> existsByWarehouseId(UUID warehouseId);
 }

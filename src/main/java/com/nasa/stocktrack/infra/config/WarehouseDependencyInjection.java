@@ -1,8 +1,8 @@
 package com.nasa.stocktrack.infra.config;
 
+import com.nasa.stocktrack.application.gateways.ProductWarehouseGateway;
 import com.nasa.stocktrack.application.gateways.WarehouseGateway;
 import com.nasa.stocktrack.application.usecases.warehouse.*;
-import org.hibernate.sql.Delete;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -35,8 +35,9 @@ public class WarehouseDependencyInjection {
     @Bean
     DeleteWarehouseUseCase deleteWarehouseUseCase(
             WarehouseGateway warehouseGateway,
-            ShowWarehouseUseCase showWarehouseUseCase
+            ShowWarehouseUseCase showWarehouseUseCase,
+            ProductWarehouseGateway productWarehouseGateway
     ) {
-        return new DeleteWarehouseUseCase(warehouseGateway, showWarehouseUseCase);
+        return new DeleteWarehouseUseCase(warehouseGateway, showWarehouseUseCase, productWarehouseGateway);
     }
 }

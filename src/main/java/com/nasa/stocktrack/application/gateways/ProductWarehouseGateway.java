@@ -11,5 +11,7 @@ public interface ProductWarehouseGateway {
 
     ProductWarehouse getProductWarehouseIdPair(UUID productId, UUID warehouseID);
 
+    boolean checkWarehouseInUseById(UUID warehouseId);
+
     void delete(ProductWarehouse productWarehouse);
 }

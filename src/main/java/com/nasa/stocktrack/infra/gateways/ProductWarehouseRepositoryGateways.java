@@ -49,6 +49,13 @@ public class ProductWarehouseRepositoryGateways implements ProductWarehouseGatew
     }
 
     @Override
+    public boolean checkWarehouseInUseById(UUID warehouseId) {
+        Optional<ProductWarehouseEntity> productWarehouseEntity = productWarehouseRepository.existsByWarehouseId(warehouseId);
+
+        return productWarehouseEntity.isPresent();
+    }
+
+    @Override
     public void delete(ProductWarehouse productWarehouse) {
         ProductWarehouseEntity productWarehouseEntity = productWarehouseMapper.toEntity(productWarehouse);
 
