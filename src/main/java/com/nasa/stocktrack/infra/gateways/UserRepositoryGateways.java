@@ -1,9 +1,15 @@
 package com.nasa.stocktrack.infra.gateways;
 
 import com.nasa.stocktrack.application.gateways.UserGateway;
+import com.nasa.stocktrack.domain.dtos.PaginatedList;
 import com.nasa.stocktrack.domain.entities.User;
+import com.nasa.stocktrack.domain.enums.OrderByEnum;
 import com.nasa.stocktrack.infra.persistence.entities.UserEntity;
 import com.nasa.stocktrack.infra.persistence.repositories.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -22,6 +28,19 @@ public class UserRepositoryGateways implements UserGateway {
     ) {
         this.userMapper = userMapper;
         this.userRepository = userRepository;
+    }
+
+    @Override
+    public PaginatedList<User> list(Integer page, Integer size, OrderByEnum orderBy, String search) {
+        Sort.Direction direction = "desc".equalsIgnoreCase(orderBy.name())
+                ? Sort.Direction.DESC
+                : Sort.Direction.ASC;
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, "full_name"));
+
+        Page<UserEntity> usersEntity = userRepository.findAll(search, pageable);
+
+        return userMapper.toListDomain(usersEntity);
     }
 
     @Override
