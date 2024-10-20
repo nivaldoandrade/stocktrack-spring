@@ -7,6 +7,7 @@ import com.nasa.stocktrack.infra.persistence.repositories.UserRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Component
 public class UserRepositoryGateways implements UserGateway {
@@ -35,6 +36,13 @@ public class UserRepositoryGateways implements UserGateway {
     @Override
     public User findByUsername(String username) {
         Optional<UserEntity> userEntity = userRepository.findByUsername(username);
+
+        return userEntity.map(userMapper::toDomain).orElse(null);
+    }
+
+    @Override
+    public User findById(UUID id) {
+        Optional<UserEntity> userEntity = userRepository.findById(id);
 
         return userEntity.map(userMapper::toDomain).orElse(null);
     }
