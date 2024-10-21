@@ -1,6 +1,7 @@
 package com.nasa.stocktrack.interfaces.dtos.user;
 
 import com.nasa.stocktrack.domain.entities.User;
+import com.nasa.stocktrack.infra.constraints.ValidPasswordPattern;
 import jakarta.validation.constraints.NotBlank;
 
 public record CreateUserRequestDTO(
@@ -11,7 +12,7 @@ public record CreateUserRequestDTO(
         @NotBlank(message = "Username is required")
         String username,
 
-        @NotBlank(message = "Password is required")
+        @ValidPasswordPattern(min = 6)
         String password
 ) {
 
