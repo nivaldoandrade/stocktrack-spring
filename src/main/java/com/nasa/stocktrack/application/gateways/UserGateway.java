@@ -12,6 +12,8 @@ public interface UserGateway {
 
     User create(User user);
 
+    void update(User user);
+
     User findByUsername(String username);
 
     User findById(UUID id);

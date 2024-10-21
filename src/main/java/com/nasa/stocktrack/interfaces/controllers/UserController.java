@@ -3,6 +3,7 @@ package com.nasa.stocktrack.interfaces.controllers;
 import com.nasa.stocktrack.application.usecases.user.CreateUserUseCase;
 import com.nasa.stocktrack.application.usecases.user.ListUserUseCase;
 import com.nasa.stocktrack.application.usecases.user.ShowUserUseCase;
+import com.nasa.stocktrack.application.usecases.user.UpdateUserUseCase;
 import com.nasa.stocktrack.domain.dtos.PaginatedList;
 import com.nasa.stocktrack.domain.entities.User;
 import com.nasa.stocktrack.domain.enums.OrderByEnum;
@@ -11,6 +12,7 @@ import com.nasa.stocktrack.infra.constraints.ValidUUID;
 import com.nasa.stocktrack.interfaces.ResourceURIHelper;
 import com.nasa.stocktrack.interfaces.dtos.user.CreateUserRequestDTO;
 import com.nasa.stocktrack.interfaces.dtos.user.ListUserResponseDTO;
+import com.nasa.stocktrack.interfaces.dtos.user.UpdateUserRequestDTO;
 import com.nasa.stocktrack.interfaces.dtos.user.UserDTO;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -30,6 +32,7 @@ public class UserController {
     private final CreateUserUseCase createUserUseCase;
     private final ShowUserUseCase showUserUseCase;
     private final ListUserUseCase listUserUseCase;
+    private final UpdateUserUseCase updateUserUseCase;
 
     @GetMapping
     public ResponseEntity<?> list(
@@ -66,5 +69,16 @@ public class UserController {
         URI uri = ResourceURIHelper.getURI(user.getId());
 
         return ResponseEntity.created(uri).body(UserDTO.toResponse(user));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> update(
+            @ValidUUID @PathVariable String id,
+            @Validated @RequestBody UpdateUserRequestDTO updateUserRequestDTO
+    ) {
+
+        updateUserUseCase.execute(updateUserRequestDTO.toDomain(UUID.fromString(id)));
+
+        return ResponseEntity.noContent().build();
     }
 }

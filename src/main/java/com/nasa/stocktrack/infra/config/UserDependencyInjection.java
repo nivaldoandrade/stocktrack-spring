@@ -5,6 +5,7 @@ import com.nasa.stocktrack.application.gateways.UserGateway;
 import com.nasa.stocktrack.application.usecases.user.CreateUserUseCase;
 import com.nasa.stocktrack.application.usecases.user.ListUserUseCase;
 import com.nasa.stocktrack.application.usecases.user.ShowUserUseCase;
+import com.nasa.stocktrack.application.usecases.user.UpdateUserUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,7 +16,6 @@ public class UserDependencyInjection {
     CreateUserUseCase createUserUseCase(UserGateway userGateway, EncryptionGateway encryptionGateway) {
         return new CreateUserUseCase(userGateway, encryptionGateway);
     }
-
     @Bean
     ShowUserUseCase showUserUseCase(UserGateway userGateway) {
         return new ShowUserUseCase(userGateway);
@@ -24,5 +24,14 @@ public class UserDependencyInjection {
     @Bean
     ListUserUseCase listUserUseCase(UserGateway userGateway) {
         return new ListUserUseCase(userGateway);
+    }
+
+    @Bean
+    UpdateUserUseCase updateUserUseCase(
+            UserGateway userGateway,
+            EncryptionGateway encryptionGateway,
+            ShowUserUseCase showUserUseCase
+    ) {
+        return new UpdateUserUseCase(userGateway, encryptionGateway, showUserUseCase);
     }
 }

@@ -53,6 +53,13 @@ public class UserRepositoryGateways implements UserGateway {
     }
 
     @Override
+    public void update(User user) {
+        UserEntity userEntity = userMapper.toEntity(user);
+
+        userRepository.save(userEntity);
+    }
+
+    @Override
     public User findByUsername(String username) {
         Optional<UserEntity> userEntity = userRepository.findByUsername(username);
 
