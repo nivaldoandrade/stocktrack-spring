@@ -2,10 +2,7 @@ package com.nasa.stocktrack.infra.config;
 
 import com.nasa.stocktrack.application.gateways.EncryptionGateway;
 import com.nasa.stocktrack.application.gateways.UserGateway;
-import com.nasa.stocktrack.application.usecases.user.CreateUserUseCase;
-import com.nasa.stocktrack.application.usecases.user.ListUserUseCase;
-import com.nasa.stocktrack.application.usecases.user.ShowUserUseCase;
-import com.nasa.stocktrack.application.usecases.user.UpdateUserUseCase;
+import com.nasa.stocktrack.application.usecases.user.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -33,5 +30,10 @@ public class UserDependencyInjection {
             ShowUserUseCase showUserUseCase
     ) {
         return new UpdateUserUseCase(userGateway, encryptionGateway, showUserUseCase);
+    }
+
+    @Bean
+    DeleteUserUseCase deleteUserUseCase(UserGateway userGateway, ShowUserUseCase showUserUseCase) {
+        return new DeleteUserUseCase(userGateway, showUserUseCase);
     }
 }

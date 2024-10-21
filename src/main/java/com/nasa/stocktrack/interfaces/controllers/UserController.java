@@ -1,9 +1,6 @@
 package com.nasa.stocktrack.interfaces.controllers;
 
-import com.nasa.stocktrack.application.usecases.user.CreateUserUseCase;
-import com.nasa.stocktrack.application.usecases.user.ListUserUseCase;
-import com.nasa.stocktrack.application.usecases.user.ShowUserUseCase;
-import com.nasa.stocktrack.application.usecases.user.UpdateUserUseCase;
+import com.nasa.stocktrack.application.usecases.user.*;
 import com.nasa.stocktrack.domain.dtos.PaginatedList;
 import com.nasa.stocktrack.domain.entities.User;
 import com.nasa.stocktrack.domain.enums.OrderByEnum;
@@ -33,6 +30,7 @@ public class UserController {
     private final ShowUserUseCase showUserUseCase;
     private final ListUserUseCase listUserUseCase;
     private final UpdateUserUseCase updateUserUseCase;
+    private final DeleteUserUseCase deleteUserUseCase;
 
     @GetMapping
     public ResponseEntity<?> list(
@@ -78,6 +76,14 @@ public class UserController {
     ) {
 
         updateUserUseCase.execute(updateUserRequestDTO.toDomain(UUID.fromString(id)));
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@ValidUUID @PathVariable String id) {
+
+        deleteUserUseCase.execute(UUID.fromString(id));
 
         return ResponseEntity.noContent().build();
     }

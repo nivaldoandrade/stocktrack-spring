@@ -60,6 +60,13 @@ public class UserRepositoryGateways implements UserGateway {
     }
 
     @Override
+    public void delete(User user) {
+        UserEntity userEntity = userMapper.toEntity(user);
+
+        userRepository.delete(userEntity);
+    }
+
+    @Override
     public User findByUsername(String username) {
         Optional<UserEntity> userEntity = userRepository.findByUsername(username);
 

@@ -14,7 +14,10 @@ public interface UserGateway {
 
     void update(User user);
 
+    void delete(User user);
+
     User findByUsername(String username);
 
     User findById(UUID id);
+
 }
