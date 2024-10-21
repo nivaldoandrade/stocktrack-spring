@@ -1,7 +1,7 @@
 package com.nasa.stocktrack.interfaces.dtos.product;
 
 import com.nasa.stocktrack.domain.entities.Product;
-import com.nasa.stocktrack.interfaces.dtos.CategoryDTO;
+import com.nasa.stocktrack.interfaces.dtos.category.CategoryDTO;
 import com.nasa.stocktrack.interfaces.dtos.productWarehouse.ProductWarehouseDTO;
 import lombok.Builder;
 

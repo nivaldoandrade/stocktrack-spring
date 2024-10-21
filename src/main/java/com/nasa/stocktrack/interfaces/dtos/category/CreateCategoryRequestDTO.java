@@ -1,8 +1,7 @@
-package com.nasa.stocktrack.interfaces.dtos;
+package com.nasa.stocktrack.interfaces.dtos.category;
 
 import com.nasa.stocktrack.domain.entities.Category;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 
 public record CreateCategoryRequestDTO(
 

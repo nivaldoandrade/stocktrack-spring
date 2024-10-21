@@ -1,4 +1,4 @@
-package com.nasa.stocktrack.interfaces.dtos;
+package com.nasa.stocktrack.interfaces.dtos.category;
 
 import com.nasa.stocktrack.domain.entities.Category;
 import lombok.Builder;
