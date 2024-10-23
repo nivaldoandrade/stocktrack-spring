@@ -1,0 +1,3 @@
+ALTER TABLE users
+ADD COLUMN role_id UUID NOT NULL,
+ADD FOREIGN KEY(role_id) REFERENCES role(id);
