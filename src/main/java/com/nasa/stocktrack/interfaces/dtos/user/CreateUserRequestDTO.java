@@ -1,6 +1,9 @@
 package com.nasa.stocktrack.interfaces.dtos.user;
 
+import com.nasa.stocktrack.domain.entities.Role;
 import com.nasa.stocktrack.domain.entities.User;
+import com.nasa.stocktrack.domain.enums.RoleEnum;
+import com.nasa.stocktrack.infra.constraints.EnumRolePattern;
 import com.nasa.stocktrack.infra.constraints.ValidPasswordPattern;
 import jakarta.validation.constraints.NotBlank;
 
@@ -13,14 +16,21 @@ public record CreateUserRequestDTO(
         String username,
 
         @ValidPasswordPattern(min = 6)
-        String password
+        String password,
+
+        @EnumRolePattern
+        String role
 ) {
 
     public User toDomain() {
+        RoleEnum roleEnum = RoleEnum.fromString(this.role);
+        Role role = new Role(roleEnum);
+
         return new User(
                 this.fullName,
                 this.username,
-                this.password
+                this.password,
+                role
         );
     }
 }

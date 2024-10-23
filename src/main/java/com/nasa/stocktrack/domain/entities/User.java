@@ -12,17 +12,21 @@ public class User {
 
     private String password;
 
-    public User(UUID id, String full_name, String username, String password) {
+    private Role role;
+
+    public User(UUID id, String full_name, String username, String password, Role role) {
         this.id = id;
         this.full_name = full_name;
         this.username = username;
         this.password = password;
+        this.role = role;
     }
 
-    public User(String full_name, String username, String password) {
+    public User(String full_name, String username, String password, Role role) {
         this.full_name = full_name;
         this.username = username;
         this.password = password;
+        this.role = role;
     }
 
     public UUID getId() {
@@ -41,7 +45,15 @@ public class User {
         return password;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

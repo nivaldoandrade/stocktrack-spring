@@ -1,7 +1,9 @@
 package com.nasa.stocktrack.infra.gateways;
 
 import com.nasa.stocktrack.domain.dtos.PaginatedList;
+import com.nasa.stocktrack.domain.entities.Role;
 import com.nasa.stocktrack.domain.entities.User;
+import com.nasa.stocktrack.infra.persistence.entities.RoleEntity;
 import com.nasa.stocktrack.infra.persistence.entities.UserEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -11,21 +13,33 @@ import java.util.List;
 @Component
 public class UserMapper {
 
+    private final RoleMapper roleMapper;
+
+    public UserMapper(RoleMapper roleMapper) {
+        this.roleMapper = roleMapper;
+    }
+
     public UserEntity toEntity(User user) {
+        RoleEntity roleEntity = roleMapper.toEntity(user.getRole());
+
         return new UserEntity(
                 user.getId(),
                 user.getFull_name(),
                 user.getUsername(),
-                user.getPassword()
+                user.getPassword(),
+                roleEntity
         );
     }
 
     public User toDomain(UserEntity userEntity) {
+        Role role = roleMapper.toDomain(userEntity.getRole());
+
         return new User(
                 userEntity.getId(),
                 userEntity.getFull_name(),
                 userEntity.getUsername(),
-                userEntity.getPassword()
+                userEntity.getPassword(),
+                role
         );
     }
 

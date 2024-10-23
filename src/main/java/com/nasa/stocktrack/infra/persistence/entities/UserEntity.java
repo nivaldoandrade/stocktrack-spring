@@ -23,4 +23,8 @@ public class UserEntity {
     private String username;
 
     private String password;
+
+    @OneToOne
+    @JoinColumn(name = "role_id")
+    private RoleEntity role;
 }

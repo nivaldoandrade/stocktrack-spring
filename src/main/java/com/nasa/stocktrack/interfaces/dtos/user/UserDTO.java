@@ -11,13 +11,17 @@ public record UserDTO(
 
         String fullName,
 
-        String username
+        String username,
+
+        String role
 ) {
     public static UserDTO toResponse(User user) {
+
         return UserDTO.builder()
                 .id(user.getId())
                 .fullName(user.getFull_name())
                 .username(user.getUsername())
+                .role(user.getRole().getName().toString())
                 .build();
     }
 }

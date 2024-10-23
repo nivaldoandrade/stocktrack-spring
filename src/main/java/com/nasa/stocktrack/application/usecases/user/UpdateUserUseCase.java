@@ -2,6 +2,8 @@ package com.nasa.stocktrack.application.usecases.user;
 
 import com.nasa.stocktrack.application.gateways.EncryptionGateway;
 import com.nasa.stocktrack.application.gateways.UserGateway;
+import com.nasa.stocktrack.application.services.RoleService;
+import com.nasa.stocktrack.domain.entities.Role;
 import com.nasa.stocktrack.domain.entities.User;
 import com.nasa.stocktrack.domain.exceptions.UserInUseException;
 
@@ -13,14 +15,18 @@ public class UpdateUserUseCase {
 
     private final ShowUserUseCase showUserUseCase;
 
+    private final RoleService roleService;
+
     public UpdateUserUseCase(
             UserGateway userGateway,
             EncryptionGateway encryptionGateway,
-            ShowUserUseCase showUserUseCase
+            ShowUserUseCase showUserUseCase,
+            RoleService roleService
     ) {
         this.userGateway = userGateway;
         this.encryptionGateway = encryptionGateway;
         this.showUserUseCase = showUserUseCase;
+        this.roleService = roleService;
     }
 
     public void execute(User user) {
@@ -32,6 +38,14 @@ public class UpdateUserUseCase {
             if(userUsernameExists != null) {
                 throw new UserInUseException();
             }
+        }
+
+        if(!user.getRole().getName().equals(userExisting.getRole().getName())) {
+            Role role = roleService.getRole(user.getRole().getName());
+
+            user.setRole(role);
+        } else {
+            user.setRole(userExisting.getRole());
         }
 
         String passwordEncode = user.getPassword() == null
