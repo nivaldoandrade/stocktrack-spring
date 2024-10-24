@@ -7,9 +7,9 @@ import com.nasa.stocktrack.domain.enums.OrderByEnum;
 import com.nasa.stocktrack.infra.constraints.EnumOrderByPattern;
 import com.nasa.stocktrack.infra.constraints.ValidUUID;
 import com.nasa.stocktrack.interfaces.ResourceURIHelper;
+import com.nasa.stocktrack.interfaces.dtos.ListResponseDTO;
 import com.nasa.stocktrack.interfaces.dtos.category.CategoryDTO;
 import com.nasa.stocktrack.interfaces.dtos.category.CreateCategoryRequestDTO;
-import com.nasa.stocktrack.interfaces.dtos.category.ListCategoryResponseDTO;
 import com.nasa.stocktrack.interfaces.dtos.category.UpdateCategoryRequestDTO;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -33,7 +33,7 @@ public class CategoryController {
     private final DeleteCategoryUseCase deleteCategoryUseCase;
 
     @GetMapping
-    public ResponseEntity<ListCategoryResponseDTO> list(
+    public ResponseEntity<ListResponseDTO<CategoryDTO>> list(
             @RequestParam(name = "page", defaultValue = "0") @Min(0) Integer page,
             @RequestParam(name = "size", defaultValue = "10") @Min(1) @Max(10) Integer size,
             @RequestParam(name = "orderBy", defaultValue = "asc") @EnumOrderByPattern String orderBy,
@@ -46,7 +46,7 @@ public class CategoryController {
                 search
         );
 
-        return ResponseEntity.ok(ListCategoryResponseDTO.toResponse(categoryPaginatedList));
+        return ResponseEntity.ok(ListResponseDTO.toResponse(categoryPaginatedList, CategoryDTO::toResponse));
     }
 
     @GetMapping("/{id}")

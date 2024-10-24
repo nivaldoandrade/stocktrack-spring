@@ -8,8 +8,8 @@ import com.nasa.stocktrack.domain.entities.ProductWarehouse;
 import com.nasa.stocktrack.infra.constraints.EnumOrderByPattern;
 import com.nasa.stocktrack.infra.constraints.ValidUUID;
 import com.nasa.stocktrack.interfaces.ResourceURIHelper;
+import com.nasa.stocktrack.interfaces.dtos.ListResponseDTO;
 import com.nasa.stocktrack.interfaces.dtos.product.CreateProductRequestDTO;
-import com.nasa.stocktrack.interfaces.dtos.product.ListProductResponseDTO;
 import com.nasa.stocktrack.interfaces.dtos.product.ProductDTO;
 import com.nasa.stocktrack.interfaces.dtos.product.UpdateProductRequestDTO;
 import com.nasa.stocktrack.interfaces.dtos.productWarehouse.ListCreateOrUpdateProductWarehouseRequestDTO;
@@ -37,7 +37,7 @@ public class ProductController {
     private final CreateOrUpdateProductWarehouseUseCase createOrUpdateProductWarehouseUseCase;
 
     @GetMapping
-    public ResponseEntity<ListProductResponseDTO> list(
+    public ResponseEntity<ListResponseDTO<ProductDTO>> list(
             @RequestParam(name = "page", defaultValue = "0") @Min(0) Integer page,
             @RequestParam(name = "size", defaultValue = "10") @Min(1) @Max(10) Integer size,
             @RequestParam(name = "orderBy", defaultValue = "asc") @EnumOrderByPattern String orderBy,
@@ -46,7 +46,7 @@ public class ProductController {
 
         PaginatedList<Product> productPaginatedList = listProductUseCase.execute(page, size, orderBy, search);
 
-        return ResponseEntity.ok(ListProductResponseDTO.toResponse(productPaginatedList));
+        return ResponseEntity.ok(ListResponseDTO.toResponse(productPaginatedList, ProductDTO::toResponse));
     }
 
     @GetMapping("/{id}")

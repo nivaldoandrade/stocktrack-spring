@@ -7,8 +7,8 @@ import com.nasa.stocktrack.domain.enums.OrderByEnum;
 import com.nasa.stocktrack.infra.constraints.EnumOrderByPattern;
 import com.nasa.stocktrack.infra.constraints.ValidUUID;
 import com.nasa.stocktrack.interfaces.ResourceURIHelper;
+import com.nasa.stocktrack.interfaces.dtos.ListResponseDTO;
 import com.nasa.stocktrack.interfaces.dtos.user.CreateUserRequestDTO;
-import com.nasa.stocktrack.interfaces.dtos.user.ListUserResponseDTO;
 import com.nasa.stocktrack.interfaces.dtos.user.UpdateUserRequestDTO;
 import com.nasa.stocktrack.interfaces.dtos.user.UserDTO;
 import jakarta.validation.constraints.Max;
@@ -33,7 +33,7 @@ public class UserController {
     private final DeleteUserUseCase deleteUserUseCase;
 
     @GetMapping
-    public ResponseEntity<?> list(
+    public ResponseEntity<ListResponseDTO<UserDTO>> list(
             @RequestParam(name = "page", defaultValue = "0") @Min(0) Integer page,
             @RequestParam(name = "size", defaultValue = "10") @Min(1) @Max(10) Integer size,
             @RequestParam(name = "orderBy", defaultValue = "asc") @EnumOrderByPattern String orderBy,
@@ -47,7 +47,7 @@ public class UserController {
                 search
         );
 
-        return ResponseEntity.ok(ListUserResponseDTO.toListResponse(userPaginatedList));
+        return ResponseEntity.ok(ListResponseDTO.toResponse(userPaginatedList, UserDTO::toResponse));
     }
 
     @GetMapping("/{id}")

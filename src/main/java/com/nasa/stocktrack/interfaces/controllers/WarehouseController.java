@@ -7,8 +7,8 @@ import com.nasa.stocktrack.domain.enums.OrderByEnum;
 import com.nasa.stocktrack.infra.constraints.EnumOrderByPattern;
 import com.nasa.stocktrack.infra.constraints.ValidUUID;
 import com.nasa.stocktrack.interfaces.ResourceURIHelper;
+import com.nasa.stocktrack.interfaces.dtos.ListResponseDTO;
 import com.nasa.stocktrack.interfaces.dtos.warehouse.CreateWarehouseDTO;
-import com.nasa.stocktrack.interfaces.dtos.warehouse.ListWarehouseResponseDTO;
 import com.nasa.stocktrack.interfaces.dtos.warehouse.UpdateWarehouseRequestDTO;
 import com.nasa.stocktrack.interfaces.dtos.warehouse.WarehouseDTO;
 import jakarta.validation.constraints.Max;
@@ -33,7 +33,7 @@ public class WarehouseController {
     private final DeleteWarehouseUseCase deleteWarehouseUseCase;
 
     @GetMapping
-    public ResponseEntity<ListWarehouseResponseDTO> list(
+    public ResponseEntity<ListResponseDTO<WarehouseDTO>> list(
             @RequestParam(name = "page", defaultValue = "0") @Min(0) Integer page,
             @RequestParam(name = "size", defaultValue = "10") @Min(1) @Max(10) Integer size,
             @RequestParam(name = "orderBy", defaultValue = "asc") @EnumOrderByPattern String orderBy,
@@ -46,7 +46,7 @@ public class WarehouseController {
                 search
         );
 
-        return ResponseEntity.ok(ListWarehouseResponseDTO.toListResponseDTO(warehousePaginatedList));
+        return ResponseEntity.ok(ListResponseDTO.toResponse(warehousePaginatedList, WarehouseDTO::toResponse));
     }
 
     @GetMapping("/{id}")
