@@ -1,4 +1,4 @@
-package com.nasa.stocktrack.infra.gateways;
+package com.nasa.stocktrack.infra.gateways.repository.category;
 
 import com.nasa.stocktrack.domain.dtos.PaginatedList;
 import com.nasa.stocktrack.domain.entities.Category;
@@ -11,7 +11,7 @@ import java.util.List;
 @Component
 public class CategoryMapper {
 
-    CategoryEntity toEntity(Category category) {
+    public CategoryEntity toEntity(Category category) {
         CategoryEntity categoryEntity = new CategoryEntity();
 
         categoryEntity.setId(category.getId());
@@ -20,7 +20,7 @@ public class CategoryMapper {
         return categoryEntity;
     }
 
-    Category toDomain(CategoryEntity categoryEntity) {
+    public Category toDomain(CategoryEntity categoryEntity) {
         Category category = new Category(
                 categoryEntity.getId(),
                 categoryEntity.getName()
@@ -29,7 +29,7 @@ public class CategoryMapper {
         return category;
     }
 
-    PaginatedList<Category> toListDomain(Page<CategoryEntity> categoryEntityPage) {
+    public PaginatedList<Category> toListDomain(Page<CategoryEntity> categoryEntityPage) {
         List<Category> categories = categoryEntityPage.stream().map(this::toDomain).toList();
 
         return new PaginatedList<Category>(

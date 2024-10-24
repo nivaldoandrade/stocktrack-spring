@@ -1,4 +1,4 @@
-package com.nasa.stocktrack.infra.gateways;
+package com.nasa.stocktrack.infra.gateways.repository.role;
 
 import com.nasa.stocktrack.application.gateways.RoleGateway;
 import com.nasa.stocktrack.domain.entities.Role;

@@ -1,8 +1,9 @@
-package com.nasa.stocktrack.infra.gateways;
+package com.nasa.stocktrack.infra.gateways.repository.productWarehouse;
 
 import com.nasa.stocktrack.domain.entities.Product;
 import com.nasa.stocktrack.domain.entities.ProductWarehouse;
 import com.nasa.stocktrack.domain.entities.Warehouse;
+import com.nasa.stocktrack.infra.gateways.repository.warehouse.WarehouseMapper;
 import com.nasa.stocktrack.infra.persistence.entities.ProductEntity;
 import com.nasa.stocktrack.infra.persistence.entities.ProductWarehouseEntity;
 import com.nasa.stocktrack.infra.persistence.entities.WarehouseEntity;

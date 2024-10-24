@@ -1,9 +1,11 @@
-package com.nasa.stocktrack.infra.gateways;
+package com.nasa.stocktrack.infra.gateways.repository.product;
 
 import com.nasa.stocktrack.domain.dtos.PaginatedList;
 import com.nasa.stocktrack.domain.entities.Category;
 import com.nasa.stocktrack.domain.entities.Product;
 import com.nasa.stocktrack.domain.entities.ProductWarehouse;
+import com.nasa.stocktrack.infra.gateways.repository.productWarehouse.ProductWarehouseMapper;
+import com.nasa.stocktrack.infra.gateways.repository.category.CategoryMapper;
 import com.nasa.stocktrack.infra.persistence.entities.CategoryEntity;
 import com.nasa.stocktrack.infra.persistence.entities.ProductEntity;
 import org.springframework.data.domain.Page;

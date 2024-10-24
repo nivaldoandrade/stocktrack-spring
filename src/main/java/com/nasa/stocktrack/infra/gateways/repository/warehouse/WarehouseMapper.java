@@ -1,4 +1,4 @@
-package com.nasa.stocktrack.infra.gateways;
+package com.nasa.stocktrack.infra.gateways.repository.warehouse;
 
 import com.nasa.stocktrack.domain.dtos.PaginatedList;
 import com.nasa.stocktrack.domain.entities.Warehouse;
@@ -12,7 +12,7 @@ import java.util.List;
 @Component
 public class WarehouseMapper {
 
-    WarehouseEntity toEntity(Warehouse warehouse) {
+    public WarehouseEntity toEntity(Warehouse warehouse) {
         WarehouseEntity warehouseEntity = new WarehouseEntity();
 
         warehouseEntity.setId(warehouse.getId());
@@ -21,14 +21,14 @@ public class WarehouseMapper {
         return warehouseEntity;
     }
 
-    Warehouse toDomain(WarehouseEntity warehouseEntity) {
+    public Warehouse toDomain(WarehouseEntity warehouseEntity) {
         return  new Warehouse(
                 warehouseEntity.getId(),
                 warehouseEntity.getName()
         );
     }
 
-    PaginatedList<Warehouse> toListDomain(Page<WarehouseEntity> warehouseEntities) {
+    public PaginatedList<Warehouse> toListDomain(Page<WarehouseEntity> warehouseEntities) {
         List<Warehouse> warehouses = warehouseEntities.stream().map(this::toDomain).toList();
 
         return new PaginatedList<Warehouse>(

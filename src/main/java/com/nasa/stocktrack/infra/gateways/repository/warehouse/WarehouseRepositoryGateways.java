@@ -1,4 +1,4 @@
-package com.nasa.stocktrack.infra.gateways;
+package com.nasa.stocktrack.infra.gateways.repository.warehouse;
 
 import com.nasa.stocktrack.application.gateways.WarehouseGateway;
 import com.nasa.stocktrack.domain.dtos.PaginatedList;

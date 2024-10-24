@@ -1,8 +1,9 @@
-package com.nasa.stocktrack.infra.gateways;
+package com.nasa.stocktrack.infra.gateways.repository.user;
 
 import com.nasa.stocktrack.domain.dtos.PaginatedList;
 import com.nasa.stocktrack.domain.entities.Role;
 import com.nasa.stocktrack.domain.entities.User;
+import com.nasa.stocktrack.infra.gateways.repository.role.RoleMapper;
 import com.nasa.stocktrack.infra.persistence.entities.RoleEntity;
 import com.nasa.stocktrack.infra.persistence.entities.UserEntity;
 import org.springframework.data.domain.Page;
