@@ -25,7 +25,7 @@ public class StringToListCreateProductWarehouseDTOConverter implements Converter
                     new TypeReference<List<CreateProductWarehouseRequestDTO>>() {}
             );
         } catch (Exception e) {
-            throw new IllegalArgumentException("Invalid format for stockPerWarehouse JSON", e);
+            return null;
         }
     }
 }
