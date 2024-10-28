@@ -2,6 +2,7 @@ package com.nasa.stocktrack.infra.config;
 
 import com.nasa.stocktrack.application.gateways.ProductGateway;
 import com.nasa.stocktrack.application.gateways.ProductWarehouseGateway;
+import com.nasa.stocktrack.application.services.FileStorageService;
 import com.nasa.stocktrack.application.services.ProductService;
 import com.nasa.stocktrack.application.services.ProductWarehouseService;
 import com.nasa.stocktrack.application.usecases.category.ShowCategoryUseCase;
@@ -19,9 +20,16 @@ public class ProductDependencyInjection {
             ProductGateway productGateway,
             ShowCategoryUseCase showCategoryUseCase,
             ProductWarehouseService productWarehouseService,
-            ProductWarehouseGateway productWarehouseGateway
+            ProductWarehouseGateway productWarehouseGateway,
+            FileStorageService fileStorageService
     ) {
-        return new CreateProductUseCase(productGateway, showCategoryUseCase, productWarehouseService, productWarehouseGateway);
+        return new CreateProductUseCase(
+                productGateway,
+                showCategoryUseCase,
+                productWarehouseService,
+                productWarehouseGateway,
+                fileStorageService
+        );
     }
 
     @Bean

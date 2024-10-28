@@ -30,6 +30,8 @@ public class ProductEntity {
 
     private String brand;
 
+    private String image;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
@@ -45,11 +47,12 @@ public class ProductEntity {
     @UpdateTimestamp(source = SourceType.DB)
     private Instant updatedAt;
 
-    public ProductEntity(UUID id, String name, String code, String brand, CategoryEntity category) {
+    public ProductEntity(UUID id, String name, String code, String brand, String image, CategoryEntity category) {
         this.id = id;
         this.name = name;
         this.code = code;
         this.brand = brand;
+        this.image = image;
         this.category = category;
     }
 }

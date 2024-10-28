@@ -3,11 +3,13 @@ package com.nasa.stocktrack.interfaces.controllers;
 import com.nasa.stocktrack.application.usecases.product.*;
 import com.nasa.stocktrack.application.usecases.productWarehouse.CreateOrUpdateProductWarehouseUseCase;
 import com.nasa.stocktrack.domain.dtos.PaginatedList;
+import com.nasa.stocktrack.domain.entities.FileData;
 import com.nasa.stocktrack.domain.entities.Product;
 import com.nasa.stocktrack.domain.entities.ProductWarehouse;
 import com.nasa.stocktrack.infra.constraints.EnumOrderByPattern;
 import com.nasa.stocktrack.infra.constraints.ValidUUID;
 import com.nasa.stocktrack.interfaces.ResourceURIHelper;
+import com.nasa.stocktrack.interfaces.dtos.FileDataDTO;
 import com.nasa.stocktrack.interfaces.dtos.ListResponseDTO;
 import com.nasa.stocktrack.interfaces.dtos.product.CreateProductRequestDTO;
 import com.nasa.stocktrack.interfaces.dtos.product.ProductDTO;
@@ -16,10 +18,12 @@ import com.nasa.stocktrack.interfaces.dtos.productWarehouse.ListCreateOrUpdatePr
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
@@ -55,9 +59,16 @@ public class ProductController {
 
         return ResponseEntity.ok(ProductDTO.toResponse(product));
     }
-    @PostMapping
-    public ResponseEntity<ProductDTO> create(@RequestBody @Validated CreateProductRequestDTO createProductRequestDTO) {
-        Product product = createProductUseCase.execute(CreateProductRequestDTO.toDomain(createProductRequestDTO));
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ProductDTO> create(
+            @ModelAttribute @Validated CreateProductRequestDTO createProductRequestDTO
+    ) throws IOException {
+        FileData fileData = FileDataDTO.toDomain(createProductRequestDTO.image());
+
+        Product product = createProductUseCase.execute(
+                CreateProductRequestDTO.toDomain(createProductRequestDTO),
+                fileData
+        );
 
         URI uri = ResourceURIHelper.getURI(product.getId());
 

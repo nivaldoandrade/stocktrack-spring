@@ -2,9 +2,11 @@ package com.nasa.stocktrack.application.usecases.product;
 
 import com.nasa.stocktrack.application.gateways.ProductGateway;
 import com.nasa.stocktrack.application.gateways.ProductWarehouseGateway;
+import com.nasa.stocktrack.application.services.FileStorageService;
 import com.nasa.stocktrack.application.services.ProductWarehouseService;
 import com.nasa.stocktrack.application.usecases.category.ShowCategoryUseCase;
 import com.nasa.stocktrack.domain.entities.Category;
+import com.nasa.stocktrack.domain.entities.FileData;
 import com.nasa.stocktrack.domain.entities.Product;
 import com.nasa.stocktrack.domain.entities.ProductWarehouse;
 import com.nasa.stocktrack.domain.exceptions.ProductExistsException;
@@ -22,20 +24,24 @@ public class CreateProductUseCase {
 
     private final ProductWarehouseGateway productWarehouseGateway;
 
+    private final FileStorageService fileStorageService;
+
     public CreateProductUseCase(
             ProductGateway productGateway,
             ShowCategoryUseCase showCategoryUseCase,
             ProductWarehouseService productWarehouseService,
-            ProductWarehouseGateway productWarehouseGateway
+            ProductWarehouseGateway productWarehouseGateway,
+            FileStorageService fileStorageService
     ) {
         this.productGateway = productGateway;
         this.showCategoryUseCase = showCategoryUseCase;
         this.productWarehouseService = productWarehouseService;
         this.productWarehouseGateway = productWarehouseGateway;
+        this.fileStorageService = fileStorageService;
     }
 
     @Transactional
-    public Product execute(Product product) {
+    public Product execute(Product product, FileData fileData) {
         Product productByNameExisting = productGateway.findByName(product.getName());
 
         if(productByNameExisting != null) {
@@ -47,6 +53,12 @@ public class CreateProductUseCase {
         if(productByCodeExisting != null) {
             throw new ProductExistsException("The product with code is already exists");
         }
+
+        String fileName = fileData != null
+                ? fileStorageService.generateFilename(fileData.getFilename())
+                : null;
+
+        product.setImage(fileName);
 
         Category category = showCategoryUseCase.execute(product.getCategory().getId());
 
@@ -62,6 +74,10 @@ public class CreateProductUseCase {
         productWarehouses =  productWarehouseGateway.saveAll(productWarehouses);
 
         newProduct.setProductWarehouses(productWarehouses);
+
+        if(fileData != null) {
+            fileStorageService.saveFile(fileData.getContent(), fileName);
+        }
 
         return newProduct;
     }

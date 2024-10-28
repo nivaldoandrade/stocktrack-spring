@@ -18,6 +18,8 @@ public record ProductDTO(
 
         String brand,
 
+        String image,
+
         CategoryDTO category,
 
         List<ProductWarehouseDTO> warehouses
@@ -36,6 +38,7 @@ public record ProductDTO(
                 .name(product.getName())
                 .code(product.getCode())
                 .brand(product.getBrand())
+                .image(product.getImage())
                 .category(categoryDTO)
                 .warehouses(productWarehouseDTOS)
                 .build();
