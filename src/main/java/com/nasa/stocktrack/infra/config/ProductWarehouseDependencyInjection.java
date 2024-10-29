@@ -13,8 +13,11 @@ import org.springframework.context.annotation.Configuration;
 public class ProductWarehouseDependencyInjection {
 
     @Bean
-    ProductWarehouseService productWarehouseService(WarehouseGateway warehouseGateway) {
-        return new ProductWarehouseService(warehouseGateway);
+    ProductWarehouseService productWarehouseService(
+            WarehouseGateway warehouseGateway,
+            ProductWarehouseGateway productWarehouseGateway
+    ) {
+        return new ProductWarehouseService(warehouseGateway, productWarehouseGateway);
     }
 
     @Bean

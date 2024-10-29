@@ -1,5 +1,6 @@
 package com.nasa.stocktrack.application.services;
 
+import com.nasa.stocktrack.application.gateways.ProductWarehouseGateway;
 import com.nasa.stocktrack.application.gateways.WarehouseGateway;
 import com.nasa.stocktrack.domain.entities.Product;
 import com.nasa.stocktrack.domain.entities.ProductWarehouse;
@@ -16,8 +17,18 @@ public class ProductWarehouseService {
 
     private final WarehouseGateway warehouseGateway;
 
-    public ProductWarehouseService(WarehouseGateway warehouseGateway) {
+    private final ProductWarehouseGateway productWarehouseGateway;
+
+    public ProductWarehouseService(
+            WarehouseGateway warehouseGateway,
+            ProductWarehouseGateway productWarehouseGateway
+    ) {
         this.warehouseGateway = warehouseGateway;
+        this.productWarehouseGateway = productWarehouseGateway;
+    }
+
+    public List<ProductWarehouse> saveAll(List<ProductWarehouse> productWarehouses) {
+        return productWarehouseGateway.saveAll(productWarehouses);
     }
 
     public List<ProductWarehouse> mapToProductWarehouses(
