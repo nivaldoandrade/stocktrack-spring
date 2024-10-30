@@ -1,6 +1,7 @@
 package com.nasa.stocktrack.infra.gateways.storage;
 
 import com.nasa.stocktrack.application.gateways.FileStorageGateway;
+import com.nasa.stocktrack.infra.exceptions.FileStorageException;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +26,7 @@ public class LocalStorageGateway implements FileStorageGateway {
         try {
             Files.createDirectories(fileStorageLocation);
         } catch (Exception e) {
-            throw new RuntimeException("Error creating folder where files will be stored");
+            throw new FileStorageException("Error creating folder where files will be stored");
         }
     }
 
@@ -36,7 +37,7 @@ public class LocalStorageGateway implements FileStorageGateway {
         try(InputStream inputStream = content) {
             Files.copy(inputStream, targetLocation);
         } catch (IOException e) {
-            throw new RuntimeException("Error storing file "
+            throw new FileStorageException("Error storing file "
                     + filename
                     + ", please try again"
             );
@@ -50,7 +51,7 @@ public class LocalStorageGateway implements FileStorageGateway {
 
             Files.deleteIfExists(targetLocation);
         } catch (IOException e) {
-            throw new RuntimeException("Error when deletion file");
+            throw new FileStorageException("Error when deletion file");
         }
     }
 }

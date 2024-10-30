@@ -143,4 +143,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(statusCode).body(error);
     }
 
+    @ExceptionHandler(FileStorageException.class)
+    public ResponseEntity<RestErrorResponse> handleFileStorageException(FileStorageException e) {
+        int statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
+
+        RestErrorResponse error = new RestErrorResponse(
+          statusCode,
+          e.getMessage(),
+          LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(statusCode).body(error);
+    }
 }
