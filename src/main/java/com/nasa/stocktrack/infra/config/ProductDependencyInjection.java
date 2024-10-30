@@ -35,8 +35,8 @@ public class ProductDependencyInjection {
     }
 
     @Bean
-    DeleteProductUseCase deleteProductUseCase(ProductGateway productGateway) {
-        return new DeleteProductUseCase(productGateway);
+    DeleteProductUseCase deleteProductUseCase(ProductService productService) {
+        return new DeleteProductUseCase(productService);
     }
 
     @Bean

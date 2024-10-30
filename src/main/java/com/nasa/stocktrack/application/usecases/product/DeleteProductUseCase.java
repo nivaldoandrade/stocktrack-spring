@@ -1,26 +1,19 @@
 package com.nasa.stocktrack.application.usecases.product;
 
-import com.nasa.stocktrack.application.gateways.ProductGateway;
-import com.nasa.stocktrack.domain.entities.Product;
-import com.nasa.stocktrack.domain.exceptions.ProductNotFoundException;
+import com.nasa.stocktrack.application.services.ProductService;
+
 
 import java.util.UUID;
 
 public class DeleteProductUseCase {
 
-    private final ProductGateway productGateway;
+    private final ProductService productService;
 
-    public DeleteProductUseCase(ProductGateway productGateway) {
-        this.productGateway = productGateway;
+    public DeleteProductUseCase( ProductService productService) {
+        this.productService = productService;
     }
 
     public void execute(UUID id) {
-        Product product = productGateway.findById(id);
-
-        if(product == null) {
-            throw new ProductNotFoundException();
-        }
-
-        productGateway.delete(product);
+        productService.delete(id);
     }
 }

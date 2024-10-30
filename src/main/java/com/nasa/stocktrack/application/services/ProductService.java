@@ -12,6 +12,7 @@ import jakarta.transaction.Transactional;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.UUID;
 
 public class ProductService {
 
@@ -104,6 +105,21 @@ public class ProductService {
             if(productExisting.getImage() != null) {
                 this.deleteProductImage(productExisting.getImage());
             }
+        }
+    }
+
+    @Transactional
+    public void delete(UUID id) {
+        Product product = productGateway.findById(id);
+
+        if(product == null) {
+            throw new ProductNotFoundException();
+        }
+
+        productGateway.delete(product);
+
+        if(product.getImage() != null) {
+            fileStorageService.deleteFile(product.getImage());
         }
     }
 
