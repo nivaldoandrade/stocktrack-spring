@@ -22,4 +22,8 @@ public class FileStorageService {
         fileStorageGateway.saveFile(content, filename);
     }
 
+    public void deleteFile(String filename) {
+        fileStorageGateway.deleteFile(filename);
+    }
+
 }

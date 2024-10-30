@@ -5,6 +5,7 @@ import com.nasa.stocktrack.domain.entities.Product;
 import com.nasa.stocktrack.infra.constraints.ValidUUID;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
@@ -20,7 +21,9 @@ public record UpdateProductRequestDTO(
 
         @ValidUUID
         @NotNull(message = "Category id is required")
-        String category_id
+        String category_id,
+
+        MultipartFile image
 ) {
 
     public static Product toDomain(UUID id, UpdateProductRequestDTO updateProductRequestDTO) {

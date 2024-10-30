@@ -7,6 +7,7 @@ import com.nasa.stocktrack.domain.entities.FileData;
 import com.nasa.stocktrack.domain.entities.Product;
 import com.nasa.stocktrack.domain.entities.ProductWarehouse;
 import com.nasa.stocktrack.domain.exceptions.ProductExistsException;
+import com.nasa.stocktrack.domain.exceptions.ProductNotFoundException;
 import jakarta.transaction.Transactional;
 
 import java.io.InputStream;
@@ -63,11 +64,58 @@ public class ProductService {
         return newProduct;
     }
 
+    @Transactional
+    public void update(Product product, FileData fileData) {
+        Product productExisting = productGateway.findById(product.getId());
+
+        if(productExisting == null) {
+            throw new ProductNotFoundException();
+        }
+
+        boolean hasSameCategoryId = product.getCategory().getId().equals(productExisting.getCategory().getId());
+
+        if(!hasSameCategoryId) {
+            Category newCategory = showCategoryUseCase.execute(product.getCategory().getId());
+
+            product.setCategory(newCategory);
+        }
+
+        if(!product.getName().equals(productExisting.getName())) {
+            this.validateNameUniqueness(product.getName());
+
+        }
+
+        if(!product.getCode().equals(productExisting.getCode())) {
+            this.validateCodeUniqueness(product.getCode());
+
+        }
+
+        String fileName = fileData != null
+                ? fileStorageService.generateFilename(fileData.getFilename())
+                : productExisting.getImage();
+
+        product.setImage(fileName);
+
+        productGateway.update(product);
+
+        if(fileData != null) {
+            this.saveProductImage(fileData.getContent(), fileName);
+
+            if(productExisting.getImage() != null) {
+                this.deleteProductImage(productExisting.getImage());
+            }
+        }
+    }
+
     public void saveProductImage(InputStream content, String fileName) {
         fileStorageService.saveFile(content, fileName);
     }
 
-    public void validateNameUniqueness(String name) {
+    public void deleteProductImage(String fileName) {
+        fileStorageService.deleteFile(fileName);
+    }
+
+    private void validateNameUniqueness(String name) {
         Product product = productGateway.findByName(name);
 
         if(product != null) {
@@ -75,7 +123,7 @@ public class ProductService {
         }
     }
 
-    public void validateCodeUniqueness(String code) {
+    private void validateCodeUniqueness(String code) {
         Product product = productGateway.findByCode(code);
 
         if(product != null) {

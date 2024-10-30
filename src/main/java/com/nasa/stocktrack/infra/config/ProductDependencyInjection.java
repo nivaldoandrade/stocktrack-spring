@@ -30,12 +30,8 @@ public class ProductDependencyInjection {
     }
 
     @Bean
-    UpdateProductUseCase updateProductUseCase(
-            ProductGateway productGateway,
-            ProductService productService,
-            ShowCategoryUseCase showCategoryUseCase
-    ) {
-        return new UpdateProductUseCase(productGateway, productService, showCategoryUseCase);
+    UpdateProductUseCase updateProductUseCase(ProductService productService) {
+        return new UpdateProductUseCase(productService);
     }
 
     @Bean

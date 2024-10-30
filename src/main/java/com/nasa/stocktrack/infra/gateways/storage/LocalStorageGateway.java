@@ -42,4 +42,15 @@ public class LocalStorageGateway implements FileStorageGateway {
             );
         }
     }
+
+    @Override
+    public void deleteFile(String filename) {
+        try {
+            Path targetLocation = this.fileStorageLocation.resolve(filename);
+
+            Files.deleteIfExists(targetLocation);
+        } catch (IOException e) {
+            throw new RuntimeException("Error when deletion file");
+        }
+    }
 }

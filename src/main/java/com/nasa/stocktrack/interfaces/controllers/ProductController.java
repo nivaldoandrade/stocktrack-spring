@@ -75,16 +75,18 @@ public class ProductController {
         return ResponseEntity.created(uri).body(ProductDTO.toResponse(product));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> update(
             @ValidUUID @PathVariable String id,
-            @RequestBody @Validated UpdateProductRequestDTO updateProductRequestDTO
-    ) {
+            @ModelAttribute @Validated UpdateProductRequestDTO updateProductRequestDTO
+    ) throws IOException {
 
-        updateProductUseCase.execute(UpdateProductRequestDTO.toDomain(
-                UUID.fromString(id),
-                updateProductRequestDTO
-        ));
+        FileData fileData = FileDataDTO.toDomain(updateProductRequestDTO.image());
+
+        updateProductUseCase.execute(
+                UpdateProductRequestDTO.toDomain(UUID.fromString(id), updateProductRequestDTO),
+                fileData
+        );
 
         return ResponseEntity.noContent().build();
     }
