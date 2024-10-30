@@ -2,6 +2,7 @@ package com.nasa.stocktrack.interfaces.dtos.product;
 
 import com.nasa.stocktrack.domain.entities.Category;
 import com.nasa.stocktrack.domain.entities.Product;
+import com.nasa.stocktrack.infra.constraints.FileTypePattern;
 import com.nasa.stocktrack.infra.constraints.ValidUUID;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -23,6 +24,7 @@ public record UpdateProductRequestDTO(
         @NotNull(message = "Category id is required")
         String category_id,
 
+        @FileTypePattern(allowedExtensions = {".jpg", ".jpeg", ".png"})
         MultipartFile image
 ) {
 
