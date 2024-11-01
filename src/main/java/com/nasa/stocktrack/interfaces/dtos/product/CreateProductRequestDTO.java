@@ -4,6 +4,7 @@ import com.nasa.stocktrack.domain.entities.Category;
 import com.nasa.stocktrack.domain.entities.Product;
 import com.nasa.stocktrack.domain.entities.ProductWarehouse;
 import com.nasa.stocktrack.infra.constraints.FileTypePattern;
+import com.nasa.stocktrack.infra.constraints.ValidFileMaxSizePattern;
 import com.nasa.stocktrack.infra.constraints.ValidUUID;
 import com.nasa.stocktrack.interfaces.dtos.productWarehouse.CreateProductWarehouseRequestDTO;
 import jakarta.validation.Valid;
@@ -33,6 +34,7 @@ public record CreateProductRequestDTO(
         @NotEmpty(message = "StockPerWarehouse is required or must be in an invalid format")
         List<@Valid CreateProductWarehouseRequestDTO> stockPerWarehouse,
 
+        @ValidFileMaxSizePattern(maxSizeInMB = 5)
         @FileTypePattern(allowedExtensions = {".jpg", ".jpeg", ".png"})
         MultipartFile image
 ) {
