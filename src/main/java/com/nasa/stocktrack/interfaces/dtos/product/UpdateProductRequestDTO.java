@@ -4,6 +4,7 @@ import com.nasa.stocktrack.domain.entities.Category;
 import com.nasa.stocktrack.domain.entities.Product;
 import com.nasa.stocktrack.infra.constraints.FileTypePattern;
 import com.nasa.stocktrack.infra.constraints.ValidFileMaxSizePattern;
+import com.nasa.stocktrack.infra.constraints.ValidFileMimeTypePattern;
 import com.nasa.stocktrack.infra.constraints.ValidUUID;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -27,6 +28,7 @@ public record UpdateProductRequestDTO(
 
         @ValidFileMaxSizePattern(maxSizeInMB = 5)
         @FileTypePattern(allowedExtensions = {".jpg", ".jpeg", ".png"})
+        @ValidFileMimeTypePattern(mimeTypes = {"image/jpeg", "image/png"})
         MultipartFile image
 ) {
 
