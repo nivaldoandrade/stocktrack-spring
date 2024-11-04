@@ -36,7 +36,7 @@ public class ProductEntity {
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
 
-    @OneToMany(mappedBy = "id.productEntity")
+    @OneToMany(mappedBy = "id.productEntity", fetch = FetchType.LAZY)
     private List<ProductWarehouseEntity> warehouses = new ArrayList<>();
 
     @Column(name = "created_at", updatable = false)

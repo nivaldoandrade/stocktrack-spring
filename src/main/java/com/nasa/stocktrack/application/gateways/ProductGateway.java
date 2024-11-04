@@ -17,6 +17,8 @@ public interface ProductGateway {
 
     Product findById(UUID id);
 
+    Product findByIdWithoutWarehouses(UUID uuid);
+
     Product findFirstByCategoryId(UUID categoryId);
 
     void update(Product product);

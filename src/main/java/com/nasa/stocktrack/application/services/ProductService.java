@@ -67,7 +67,7 @@ public class ProductService {
 
     @Transactional
     public void update(Product product, FileData fileData) {
-        Product productExisting = productGateway.findById(product.getId());
+        Product productExisting = productGateway.findByIdWithoutWarehouses(product.getId());
 
         if(productExisting == null) {
             throw new ProductNotFoundException();

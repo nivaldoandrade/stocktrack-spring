@@ -50,6 +50,15 @@ public class Product {
         this.category = category;
     }
 
+    public Product(UUID id, String name, String code, String brand, String image, Category category) {
+        this.id = id;
+        this.name = name;
+        this.code = code;
+        this.brand = brand;
+        this.image = image;
+        this.category = category;
+    }
+
     public UUID getId() {
         return id;
     }

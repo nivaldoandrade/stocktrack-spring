@@ -76,6 +76,13 @@ public class ProductRepositoryGateways implements ProductGateway {
     }
 
     @Override
+    public Product findByIdWithoutWarehouses(UUID id) {
+        Optional<ProductEntity> productEntity = productRepository.findById(id);
+
+        return productEntity.map(productMapper::toDomainWithoutWarehouses).orElse(null);
+    }
+
+    @Override
     public Product findFirstByCategoryId(UUID categoryId) {
        Optional<ProductEntity> productEntity = productRepository.findFirstByCategoryId(categoryId);
 
@@ -86,7 +93,14 @@ public class ProductRepositoryGateways implements ProductGateway {
     public void update(Product product) {
         ProductEntity productEntity = productMapper.toEntity(product);
 
-        productRepository.save(productEntity);
+        productRepository.updateWithoutWarehouses(
+                product.getName(),
+                product.getCode(),
+                product.getBrand(),
+                product.getImage(),
+                productEntity.getCategory(),
+                product.getId()
+        );
     }
 
     @Override

@@ -56,6 +56,19 @@ public class ProductMapper {
         );
     }
 
+    Product toDomainWithoutWarehouses(ProductEntity productEntity) {
+        Category category = categoryMapper.toDomain(productEntity.getCategory());
+
+        return new Product(
+                productEntity.getId(),
+                productEntity.getName(),
+                productEntity.getCode(),
+                productEntity.getBrand(),
+                productEntity.getImage(),
+                category
+        );
+    }
+
     PaginatedList<Product> toListDomain(Page<ProductEntity> productEntities) {
         List<Product> products = productEntities.map(this::toDomain).toList();
 
