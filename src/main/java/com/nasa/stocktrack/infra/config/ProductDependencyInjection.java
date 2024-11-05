@@ -20,6 +20,11 @@ public class ProductDependencyInjection {
     }
 
     @Bean
+    GetImageProductUseCase getImageProductUseCase(FileStorageService fileStorageService) {
+        return new GetImageProductUseCase(fileStorageService);
+    }
+
+    @Bean
     ShowProductUseCase showProductUseCase(ProductGateway productGateway) {
         return new ShowProductUseCase(productGateway);
     }

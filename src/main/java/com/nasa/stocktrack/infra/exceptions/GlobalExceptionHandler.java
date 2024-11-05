@@ -155,4 +155,17 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(statusCode).body(error);
     }
+
+    @ExceptionHandler(FileNotFoundException.class)
+    public ResponseEntity<RestErrorResponse> handleFileNotFoundException(FileNotFoundException e) {
+        int status = HttpStatus.NOT_FOUND.value();
+
+        RestErrorResponse error = new RestErrorResponse(
+                status,
+                e.getMessage(),
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(status).body(error);
+    }
 }

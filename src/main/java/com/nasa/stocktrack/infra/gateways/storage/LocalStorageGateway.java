@@ -1,10 +1,12 @@
 package com.nasa.stocktrack.infra.gateways.storage;
 
 import com.nasa.stocktrack.application.gateways.FileStorageGateway;
+import com.nasa.stocktrack.infra.exceptions.FileNotFoundException;
 import com.nasa.stocktrack.infra.exceptions.FileStorageException;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -28,6 +30,22 @@ public class LocalStorageGateway implements FileStorageGateway {
         } catch (Exception e) {
             throw new FileStorageException("Error creating folder where files will be stored");
         }
+    }
+
+    @Override
+    public InputStream getFile(String filename) {
+        try {
+            Path targetLocation = this.fileStorageLocation.resolve(filename);
+
+            if(!Files.exists(targetLocation)) {
+                throw new FileNotFoundException(filename);
+            }
+
+            return new FileInputStream(targetLocation.toFile());
+        } catch (IOException e) {
+            throw new FileStorageException("File cannot be recovered");
+        }
+
     }
 
     @Override

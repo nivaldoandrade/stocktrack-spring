@@ -18,6 +18,10 @@ public class FileStorageService {
         return generateFileName(originalFilename);
     }
 
+    public InputStream getFile(String filename) {
+        return fileStorageGateway.getFile(filename);
+    }
+
     public void saveFile(InputStream content, String filename) {
         fileStorageGateway.saveFile(content, filename);
     }

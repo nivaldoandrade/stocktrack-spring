@@ -18,12 +18,15 @@ import com.nasa.stocktrack.interfaces.dtos.productWarehouse.ListCreateOrUpdatePr
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
@@ -39,6 +42,7 @@ public class ProductController {
     private final UpdateProductUseCase updateProductUseCase;
     private final DeleteProductUseCase deleteProductUseCase;
     private final CreateOrUpdateProductWarehouseUseCase createOrUpdateProductWarehouseUseCase;
+    private final GetImageProductUseCase getImageProductUseCase;
 
     @GetMapping
     public ResponseEntity<ListResponseDTO<ProductDTO>> list(
@@ -51,6 +55,17 @@ public class ProductController {
         PaginatedList<Product> productPaginatedList = listProductUseCase.execute(page, size, orderBy, search);
 
         return ResponseEntity.ok(ListResponseDTO.toResponse(productPaginatedList, ProductDTO::toResponse));
+    }
+
+    @GetMapping("/images/{imageName}")
+    public ResponseEntity<Resource> getImage(@PathVariable String imageName) {
+        InputStream imageStream = getImageProductUseCase.execute(imageName);
+
+        MediaType contentType = imageName.endsWith(".png") ? MediaType.IMAGE_PNG : MediaType.IMAGE_JPEG;
+
+        return ResponseEntity.ok()
+                .contentType(contentType)
+                .body(new InputStreamResource(imageStream));
     }
 
     @GetMapping("/{id}")
