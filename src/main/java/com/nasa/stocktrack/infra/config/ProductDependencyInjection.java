@@ -14,7 +14,6 @@ import org.springframework.context.annotation.Configuration;
 public class ProductDependencyInjection {
 
     @Bean
-    @Transactional
     CreateProductUseCase createProductUseCase(ProductService productService) {
         return new CreateProductUseCase(productService);
     }
