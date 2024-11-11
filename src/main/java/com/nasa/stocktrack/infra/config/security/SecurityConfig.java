@@ -1,6 +1,9 @@
 package com.nasa.stocktrack.infra.config.security;
 
 
+import com.nasa.stocktrack.application.gateways.AuthProviderGateway;
+import com.nasa.stocktrack.application.gateways.TokenGateway;
+import com.nasa.stocktrack.application.services.AuthService;
 import com.nasa.stocktrack.infra.persistence.repositories.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -59,4 +62,8 @@ public class SecurityConfig {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
+    @Bean
+    AuthService authService(AuthProviderGateway authProviderGateway, TokenGateway tokenGateway) {
+        return new AuthService(authProviderGateway, tokenGateway);
+    }
 }

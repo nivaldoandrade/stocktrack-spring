@@ -2,6 +2,7 @@ package com.nasa.stocktrack.infra.config;
 
 import com.nasa.stocktrack.application.gateways.EncryptionGateway;
 import com.nasa.stocktrack.application.gateways.UserGateway;
+import com.nasa.stocktrack.application.services.AuthService;
 import com.nasa.stocktrack.application.services.RoleService;
 import com.nasa.stocktrack.application.usecases.user.*;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +12,11 @@ import org.springframework.context.annotation.Configuration;
 public class UserDependencyInjection {
 
     @Bean
+    SignInUseCase signInUseCase(AuthService authService) {
+        return new SignInUseCase(authService);
+    }
+
+    @Bean
     CreateUserUseCase createUserUseCase(
             UserGateway userGateway,
             EncryptionGateway encryptionGateway,
@@ -18,6 +24,7 @@ public class UserDependencyInjection {
 
         return new CreateUserUseCase(userGateway, encryptionGateway, roleService);
     }
+
     @Bean
     ShowUserUseCase showUserUseCase(UserGateway userGateway) {
         return new ShowUserUseCase(userGateway);
