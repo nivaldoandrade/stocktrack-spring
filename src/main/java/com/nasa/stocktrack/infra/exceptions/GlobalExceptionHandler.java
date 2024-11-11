@@ -7,6 +7,7 @@ import com.nasa.stocktrack.domain.exceptions.EntityInUseException;
 import com.nasa.stocktrack.domain.exceptions.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -167,5 +168,18 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.status(status).body(error);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<RestErrorResponse> handleBadCredentialsException(BadCredentialsException e) {
+        int statusCode = HttpStatus.BAD_REQUEST.value();
+
+        RestErrorResponse error = new RestErrorResponse(
+                statusCode,
+                "The username or password is invalid",
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(statusCode).body(error);
     }
 }
