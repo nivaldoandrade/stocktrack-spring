@@ -5,9 +5,13 @@ import com.nasa.stocktrack.domain.exceptions.DuplicateWarehouseIdException;
 import com.nasa.stocktrack.domain.exceptions.EntityExistsException;
 import com.nasa.stocktrack.domain.exceptions.EntityInUseException;
 import com.nasa.stocktrack.domain.exceptions.EntityNotFoundException;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -177,6 +181,58 @@ public class GlobalExceptionHandler {
         RestErrorResponse error = new RestErrorResponse(
                 statusCode,
                 "The username or password is invalid",
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(statusCode).body(error);
+    }
+
+    @ExceptionHandler(MalformedJwtException.class)
+    public ResponseEntity<RestErrorResponse> handleMalformedJwtException(MalformedJwtException e) {
+        int statusCode = HttpStatus.BAD_REQUEST.value();
+
+        RestErrorResponse error = new RestErrorResponse(
+                statusCode,
+                "The JWT format is invalid",
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(statusCode).body(error);
+    }
+
+    @ExceptionHandler(SignatureException.class)
+    public ResponseEntity<RestErrorResponse> handleSignatureException(SignatureException e) {
+        int statusCode = HttpStatus.UNAUTHORIZED.value();
+
+        RestErrorResponse error = new RestErrorResponse(
+                statusCode,
+                "The JWT signature is invalid",
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(statusCode).body(error);
+    }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<RestErrorResponse> handleExpiredJwtException(ExpiredJwtException e) {
+        int statusCode = HttpStatus.UNAUTHORIZED.value();
+
+        RestErrorResponse error = new RestErrorResponse(
+                statusCode,
+                "The JWT token has expired",
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(statusCode).body(error);
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<RestErrorResponse> handleExpiredJwtException(UsernameNotFoundException e) {
+        int statusCode = HttpStatus.UNAUTHORIZED.value();
+
+        RestErrorResponse error = new RestErrorResponse(
+                statusCode,
+                e.getMessage(),
                 LocalDateTime.now()
         );
 
