@@ -5,6 +5,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -16,9 +17,11 @@ import java.util.function.Function;
 @Component
 public class TokenService implements TokenGateway {
 
-    private String secretKey = "93624b6ac3de8f0d54043c9d4c6827d2b921127dd58f2699610cf064e8659113";
+    @Value("${security.jwt.secret-key}")
+    private String secretKey;
 
-    private long expiresIn = 86400000;
+    @Value("${security.jwt.expires-in}")
+    private long expiresIn;
 
     @Override
     public String generateToken(String userId) {
