@@ -27,12 +27,16 @@ public class SecurityConfig {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+
     public SecurityConfig(
             UserRepository userRepository,
-            PasswordEncoder passwordEncoder
+            PasswordEncoder passwordEncoder,
+            CustomAuthenticationEntryPoint customAuthenticationEntryPoint
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
     }
 
     @Bean
@@ -46,6 +50,7 @@ public class SecurityConfig {
                         request.requestMatchers("/auth/signin").permitAll()
                                 .anyRequest().authenticated()
                 )
+                .exceptionHandling(ex -> ex.authenticationEntryPoint(customAuthenticationEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
