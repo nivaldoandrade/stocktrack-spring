@@ -2,10 +2,14 @@ package com.nasa.stocktrack.infra.persistence.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SourceType;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -32,6 +36,14 @@ public class UserEntity implements UserDetails {
     @OneToOne
     @JoinColumn(name = "role_id")
     private RoleEntity role;
+
+    @Column(name = "created_at", updatable = false)
+    @CreationTimestamp(source = SourceType.DB)
+    private Instant createdAt;
+
+    @Column(name = "updated_at")
+    @UpdateTimestamp(source = SourceType.DB)
+    private Instant updatedAt;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

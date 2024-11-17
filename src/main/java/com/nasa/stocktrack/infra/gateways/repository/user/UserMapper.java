@@ -23,13 +23,14 @@ public class UserMapper {
     public UserEntity toEntity(User user) {
         RoleEntity roleEntity = roleMapper.toEntity(user.getRole());
 
-        return new UserEntity(
-                user.getId(),
-                user.getFull_name(),
-                user.getUsername(),
-                user.getPassword(),
-                roleEntity
-        );
+        UserEntity userEntity = new UserEntity();
+        userEntity.setId(user.getId());
+        userEntity.setFull_name(user.getFull_name());
+        userEntity.setUsername(user.getUsername());
+        userEntity.setPassword(user.getPassword());
+        userEntity.setRole(roleEntity);
+
+        return userEntity;
     }
 
     public User toDomain(UserEntity userEntity) {
