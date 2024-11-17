@@ -6,6 +6,7 @@ import com.nasa.stocktrack.domain.entities.User;
 import com.nasa.stocktrack.domain.enums.OrderByEnum;
 import com.nasa.stocktrack.infra.constraints.EnumOrderByPattern;
 import com.nasa.stocktrack.infra.constraints.ValidUUID;
+import com.nasa.stocktrack.infra.persistence.entities.UserEntity;
 import com.nasa.stocktrack.interfaces.ResourceURIHelper;
 import com.nasa.stocktrack.interfaces.dtos.ListResponseDTO;
 import com.nasa.stocktrack.interfaces.dtos.user.CreateUserRequestDTO;
@@ -15,6 +16,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,6 +51,17 @@ public class UserController {
 
         return ResponseEntity.ok(ListResponseDTO.toResponse(userPaginatedList, UserDTO::toResponse));
     }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserDTO> me(Authentication authentication) {
+        UserEntity userAuth = (UserEntity) authentication.getPrincipal();
+
+        UUID userAuthId = userAuth.getId();
+
+        User user = showUserUseCase.execute(userAuthId);
+
+        return ResponseEntity.ok(UserDTO.toResponse(user));
+     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> show(@ValidUUID @PathVariable String id) {
