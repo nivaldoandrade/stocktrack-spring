@@ -98,9 +98,16 @@ public class UserController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@ValidUUID @PathVariable String id) {
+    public ResponseEntity<Void> delete(
+            @ValidUUID @PathVariable String id,
+            Authentication authentication
+    ) {
 
-        deleteUserUseCase.execute(UUID.fromString(id));
+        UserEntity userEntity = (UserEntity) authentication.getPrincipal();
+
+        UUID userAuthId = userEntity.getId();
+
+        deleteUserUseCase.execute(UUID.fromString(id), userAuthId);
 
         return ResponseEntity.noContent().build();
     }

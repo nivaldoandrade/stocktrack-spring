@@ -1,10 +1,7 @@
 package com.nasa.stocktrack.infra.exceptions;
 
 
-import com.nasa.stocktrack.domain.exceptions.DuplicateWarehouseIdException;
-import com.nasa.stocktrack.domain.exceptions.EntityExistsException;
-import com.nasa.stocktrack.domain.exceptions.EntityInUseException;
-import com.nasa.stocktrack.domain.exceptions.EntityNotFoundException;
+import com.nasa.stocktrack.domain.exceptions.*;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SignatureException;
@@ -247,6 +244,19 @@ public class GlobalExceptionHandler {
         RestErrorResponse error = new RestErrorResponse(
                 statusCode,
                 "You are not authorized to access this resource",
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(statusCode).body(error);
+    }
+
+    @ExceptionHandler(SelfDeletionException.class)
+    public ResponseEntity<RestErrorResponse> handleSelfDeletionException(SelfDeletionException e) {
+        int statusCode = HttpStatus.BAD_REQUEST.value();
+
+        RestErrorResponse error = new RestErrorResponse(
+                statusCode,
+                e.getMessage(),
                 LocalDateTime.now()
         );
 
