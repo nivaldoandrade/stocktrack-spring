@@ -5,6 +5,7 @@ import com.nasa.stocktrack.application.usecases.productWarehouse.DeleteProductWa
 import com.nasa.stocktrack.infra.constraints.ValidUUID;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,8 @@ import java.util.UUID;
 public class ProductWarehouseController {
 
     private final DeleteProductWarehouseUseCase deleteProductWarehouseUseCase;
+
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{productId}/{warehouseId}")
     public ResponseEntity<Void> delete(
             @ValidUUID @PathVariable String productId,

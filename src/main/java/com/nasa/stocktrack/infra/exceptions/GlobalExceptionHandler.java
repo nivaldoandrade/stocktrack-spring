@@ -10,6 +10,7 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -233,6 +234,19 @@ public class GlobalExceptionHandler {
         RestErrorResponse error = new RestErrorResponse(
                 statusCode,
                 e.getMessage(),
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(statusCode).body(error);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<RestErrorResponse> handleAccessDeniedException(AccessDeniedException e) {
+        int statusCode = HttpStatus.FORBIDDEN.value();
+
+        RestErrorResponse error = new RestErrorResponse(
+                statusCode,
+                "You are not authorized to access this resource",
                 LocalDateTime.now()
         );
 

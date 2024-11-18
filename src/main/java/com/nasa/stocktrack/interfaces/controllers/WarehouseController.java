@@ -15,6 +15,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,6 +57,7 @@ public class WarehouseController {
         return ResponseEntity.ok(WarehouseDTO.toResponse(warehouse));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<WarehouseDTO> create(@RequestBody @Validated CreateWarehouseDTO createWarehouseDTO) {
 
@@ -66,6 +68,7 @@ public class WarehouseController {
         return ResponseEntity.created(uri).body(WarehouseDTO.toResponse(warehouse));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(
             @ValidUUID @PathVariable String id,
@@ -78,6 +81,7 @@ public class WarehouseController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@ValidUUID @PathVariable String id) {
 

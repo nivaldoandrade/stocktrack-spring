@@ -16,6 +16,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +35,7 @@ public class UserController {
     private final UpdateUserUseCase updateUserUseCase;
     private final DeleteUserUseCase deleteUserUseCase;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<ListResponseDTO<UserDTO>> list(
             @RequestParam(name = "page", defaultValue = "0") @Min(0) Integer page,
@@ -55,7 +57,6 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<UserDTO> me(Authentication authentication) {
         UserEntity userAuth = (UserEntity) authentication.getPrincipal();
-
         UUID userAuthId = userAuth.getId();
 
         User user = showUserUseCase.execute(userAuthId);
@@ -63,6 +64,7 @@ public class UserController {
         return ResponseEntity.ok(UserDTO.toResponse(user));
      }
 
+    @PreAuthorize("hasRole('ADMIN') or #id == principal.id.toString()")
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> show(@ValidUUID @PathVariable String id) {
 
@@ -72,6 +74,7 @@ public class UserController {
         return ResponseEntity.ok(UserDTO.toResponse(user));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<UserDTO> create(@Validated @RequestBody CreateUserRequestDTO createUserRequestDTO) {
 
@@ -82,17 +85,18 @@ public class UserController {
         return ResponseEntity.created(uri).body(UserDTO.toResponse(user));
     }
 
+    @PreAuthorize("hasRole('ADMIN') or #id == principal.id.toString()")
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(
             @ValidUUID @PathVariable String id,
             @Validated @RequestBody UpdateUserRequestDTO updateUserRequestDTO
     ) {
-
         updateUserUseCase.execute(updateUserRequestDTO.toDomain(UUID.fromString(id)));
 
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@ValidUUID @PathVariable String id) {
 

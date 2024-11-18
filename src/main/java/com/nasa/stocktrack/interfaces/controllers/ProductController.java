@@ -22,6 +22,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -74,6 +75,8 @@ public class ProductController {
 
         return ResponseEntity.ok(ProductDTO.toResponse(product));
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ProductDTO> create(
             @ModelAttribute @Validated CreateProductRequestDTO createProductRequestDTO
@@ -90,6 +93,7 @@ public class ProductController {
         return ResponseEntity.created(uri).body(ProductDTO.toResponse(product));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> update(
             @ValidUUID @PathVariable String id,
@@ -106,7 +110,7 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
-
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{productId}/warehouses")
     public ResponseEntity<Void> createOrUpdateProductWarehouse(
             @ValidUUID @PathVariable String productId,
@@ -121,6 +125,7 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@ValidUUID @PathVariable String id) {
         deleteProductUseCase.execute(UUID.fromString(id));
