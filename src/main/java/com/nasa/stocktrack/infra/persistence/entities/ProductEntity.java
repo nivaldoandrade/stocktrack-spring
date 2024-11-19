@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
+@EntityListeners(ProductEntityListener.class)
 @Table(name = "product")
 @Getter
 @Setter
@@ -38,6 +39,9 @@ public class ProductEntity {
 
     @OneToMany(mappedBy = "id.productEntity", fetch = FetchType.LAZY)
     private List<ProductWarehouseEntity> warehouses = new ArrayList<>();
+
+    @Transient
+    private String imageUrl;
 
     @Column(name = "created_at", updatable = false)
     @CreationTimestamp(source = SourceType.DB)

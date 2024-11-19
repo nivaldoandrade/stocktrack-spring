@@ -20,6 +20,8 @@ public record ProductDTO(
 
         String image,
 
+        String imageUrl,
+
         CategoryDTO category,
 
         List<ProductWarehouseDTO> warehouses
@@ -39,6 +41,7 @@ public record ProductDTO(
                 .code(product.getCode())
                 .brand(product.getBrand())
                 .image(product.getImage())
+                .imageUrl(product.getImageUrl())
                 .category(categoryDTO)
                 .warehouses(productWarehouseDTOS)
                 .build();

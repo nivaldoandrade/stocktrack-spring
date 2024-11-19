@@ -16,6 +16,8 @@ public class Product {
 
     private String image;
 
+    private String imageUrl;
+
     private Category category;
 
     private List<ProductWarehouse> productWarehouses = new ArrayList<>();
@@ -24,13 +26,14 @@ public class Product {
         this.id = id;
     }
 
-    public Product(UUID id, String name, String code, String brand, String image, Category category, List<ProductWarehouse> productWarehouses) {
+    public Product(UUID id, String name, String code, String brand, String image, String imageUrl, Category category, List<ProductWarehouse> productWarehouses) {
         this.id = id;
         this.name = name;
         this.code = code;
         this.brand = brand;
         this.category = category;
         this.image = image;
+        this.imageUrl = imageUrl;
         this.productWarehouses = productWarehouses;
     }
 
@@ -50,12 +53,13 @@ public class Product {
         this.category = category;
     }
 
-    public Product(UUID id, String name, String code, String brand, String image, Category category) {
+    public Product(UUID id, String name, String code, String brand, String image, String imageUrl, Category category) {
         this.id = id;
         this.name = name;
         this.code = code;
         this.brand = brand;
         this.image = image;
+        this.imageUrl = imageUrl;
         this.category = category;
     }
 
@@ -77,6 +81,10 @@ public class Product {
 
     public String getImage() {
         return image;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     public Category getCategory() {

@@ -51,6 +51,7 @@ public class ProductMapper {
                 productEntity.getCode(),
                 productEntity.getBrand(),
                 productEntity.getImage(),
+                productEntity.getImageUrl(),
                 category,
                 productWarehouses
         );
@@ -65,6 +66,7 @@ public class ProductMapper {
                 productEntity.getCode(),
                 productEntity.getBrand(),
                 productEntity.getImage(),
+                productEntity.getImageUrl(),
                 category
         );
     }
