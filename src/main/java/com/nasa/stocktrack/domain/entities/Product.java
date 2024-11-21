@@ -16,6 +16,8 @@ public class Product {
 
     private String image;
 
+    private Integer total;
+
     private String imageUrl;
 
     private Category category;
@@ -26,13 +28,14 @@ public class Product {
         this.id = id;
     }
 
-    public Product(UUID id, String name, String code, String brand, String image, String imageUrl, Category category, List<ProductWarehouse> productWarehouses) {
+    public Product(UUID id, String name, String code, String brand, String image, Integer total, String imageUrl, Category category, List<ProductWarehouse> productWarehouses) {
         this.id = id;
         this.name = name;
         this.code = code;
         this.brand = brand;
         this.category = category;
         this.image = image;
+        this.total = total;
         this.imageUrl = imageUrl;
         this.productWarehouses = productWarehouses;
     }
@@ -83,6 +86,10 @@ public class Product {
         return image;
     }
 
+    public Integer getTotal() {
+        return total;
+    }
+
     public String getImageUrl() {
         return imageUrl;
     }
@@ -109,6 +116,10 @@ public class Product {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public void setTotal(Integer total) {
+        this.total = total;
     }
 
     public void setCategory(Category category) {

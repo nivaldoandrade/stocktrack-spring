@@ -51,6 +51,11 @@ public class ProductService {
 
         product.setCategory(category);
 
+        int total = product.getProductWarehouses()
+                .stream().mapToInt(ProductWarehouse::getQuantity).sum();
+
+        product.setTotal(total);
+
         Product newProduct =  productGateway.create(product);
 
         List<ProductWarehouse> productWarehouses = productWarehouseService.mapToProductWarehouses(

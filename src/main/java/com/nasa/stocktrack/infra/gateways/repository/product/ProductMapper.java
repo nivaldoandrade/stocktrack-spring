@@ -31,14 +31,17 @@ public class ProductMapper {
     ProductEntity toEntity(Product product) {
         CategoryEntity category = categoryMapper.toEntity(product.getCategory());
 
-        return new ProductEntity(
-                product.getId(),
-                product.getName(),
-                product.getCode(),
-                product.getBrand(),
-                product.getImage(),
-                category
-        );
+        ProductEntity productEntity = new ProductEntity();
+
+        productEntity.setId(product.getId());
+        productEntity.setName(product.getName());
+        productEntity.setCode(product.getCode());
+        productEntity.setBrand(product.getBrand());
+        productEntity.setImage(product.getImage());
+        productEntity.setTotal(product.getTotal());
+        productEntity.setCategory(category);
+
+        return productEntity;
     }
 
     Product toDomain(ProductEntity productEntity) {
@@ -51,6 +54,7 @@ public class ProductMapper {
                 productEntity.getCode(),
                 productEntity.getBrand(),
                 productEntity.getImage(),
+                productEntity.getTotal(),
                 productEntity.getImageUrl(),
                 category,
                 productWarehouses

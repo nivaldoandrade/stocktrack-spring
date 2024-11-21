@@ -20,6 +20,8 @@ public record ProductDTO(
 
         String image,
 
+        int quantityTotal,
+
         String imageUrl,
 
         CategoryDTO category,
@@ -41,6 +43,7 @@ public record ProductDTO(
                 .code(product.getCode())
                 .brand(product.getBrand())
                 .image(product.getImage())
+                .quantityTotal(product.getTotal())
                 .imageUrl(product.getImageUrl())
                 .category(categoryDTO)
                 .warehouses(productWarehouseDTOS)

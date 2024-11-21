@@ -33,6 +33,8 @@ public class ProductEntity {
 
     private String image;
 
+    private Integer total;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private CategoryEntity category;

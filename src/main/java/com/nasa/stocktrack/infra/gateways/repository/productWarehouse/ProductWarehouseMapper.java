@@ -28,6 +28,7 @@ public class ProductWarehouseMapper {
         productEntity.setId(productWarehouse.getProduct().getId());
         WarehouseEntity warehouseEntity = warehouseMapper.toEntity(productWarehouse.getWarehouse());
 
+
         productWarehouseEntity.setProductEntity(productEntity);
         productWarehouseEntity.setWarehouseEntity(warehouseEntity);
         productWarehouseEntity.setQuantity(productWarehouse.getQuantity());
