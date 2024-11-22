@@ -34,7 +34,7 @@ public class ProductWarehouseEntity {
     @CreationTimestamp(source = SourceType.DB)
     private Instant createdAt;
 
-    @Column(name = "updated_at")
+    @Column(name = "updated_at", updatable = false)
     @UpdateTimestamp(source = SourceType.DB)
     private Instant updatedAt;
 
