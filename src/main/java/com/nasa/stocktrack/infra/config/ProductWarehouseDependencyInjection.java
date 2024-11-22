@@ -1,5 +1,6 @@
 package com.nasa.stocktrack.infra.config;
 
+import com.nasa.stocktrack.application.gateways.ProductGateway;
 import com.nasa.stocktrack.application.gateways.ProductWarehouseGateway;
 import com.nasa.stocktrack.application.gateways.WarehouseGateway;
 import com.nasa.stocktrack.application.services.ProductWarehouseService;
@@ -22,14 +23,14 @@ public class ProductWarehouseDependencyInjection {
 
     @Bean
     CreateOrUpdateProductWarehouseUseCase createOrUpdateProductWarehouseUseCase(
-            ProductWarehouseGateway productWarehouseGateway,
             ShowProductUseCase showProductUseCase,
-            ProductWarehouseService productWarehouseService
+            ProductWarehouseService productWarehouseService,
+            ProductGateway productGateway
     ) {
         return new CreateOrUpdateProductWarehouseUseCase(
-                productWarehouseGateway,
                 showProductUseCase,
-                productWarehouseService
+                productWarehouseService,
+                productGateway
         );
     }
 

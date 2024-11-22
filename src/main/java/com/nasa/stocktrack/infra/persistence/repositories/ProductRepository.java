@@ -32,4 +32,13 @@ public interface ProductRepository extends JpaRepository<ProductEntity, UUID>, J
             @Param("category")CategoryEntity category,
             @Param("id") UUID id
     );
+
+    @Modifying
+    @Query("UPDATE ProductEntity p " +
+            "SET p.total = :total " +
+            "WHERE p.id = :id")
+    void updateTotal(
+            @Param("id") UUID id,
+            @Param("total") Integer total
+    );
 }

@@ -104,6 +104,11 @@ public class ProductRepositoryGateways implements ProductGateway {
     }
 
     @Override
+    public void updateTotal(UUID productId, Integer total) {
+        productRepository.updateTotal(productId, total);
+    }
+
+    @Override
     public void delete(Product product) {
         ProductEntity productEntity = productMapper.toEntity(product);
 

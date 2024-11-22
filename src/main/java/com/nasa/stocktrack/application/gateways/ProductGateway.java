@@ -23,5 +23,7 @@ public interface ProductGateway {
 
     void update(Product product);
 
+    void updateTotal(UUID productId, Integer total);
+
     void delete(Product product);
 }
