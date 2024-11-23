@@ -49,7 +49,11 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request ->
-                        request.requestMatchers("/auth/signin").permitAll()
+                        request.requestMatchers(
+                                "/auth/signin",
+                                        "/swagger-ui/**",
+                                        "/v3/api-docs/**"
+                                ).permitAll()
                                 .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(customAuthenticationEntryPoint))
