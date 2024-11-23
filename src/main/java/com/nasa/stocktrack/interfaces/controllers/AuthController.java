@@ -3,6 +3,7 @@ package com.nasa.stocktrack.interfaces.controllers;
 import com.nasa.stocktrack.application.usecases.user.SignInUseCase;
 import com.nasa.stocktrack.interfaces.dtos.auth.SignInRequestDTO;
 import com.nasa.stocktrack.interfaces.dtos.auth.TokenResponseDTO;
+import com.nasa.stocktrack.interfaces.openapi.controllers.AuthControllerOpenAPI;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -14,10 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/auth")
 @AllArgsConstructor
-public class AuthController {
+public class AuthController implements AuthControllerOpenAPI {
 
     private final SignInUseCase signInUseCase;
 
+    @Override
     @PostMapping("/signin")
     public ResponseEntity<TokenResponseDTO> signIn(@Validated @RequestBody SignInRequestDTO signInRequestDTO) {
 
