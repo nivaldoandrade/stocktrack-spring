@@ -43,8 +43,9 @@ public class CreateOrUpdateProductWarehouseUseCase {
         int total = warehouseMap.values().stream()
                         .mapToInt(ProductWarehouse::getQuantity).sum();
 
-
-        productGateway.updateTotal(productId, total);
+        if(!productExisting.getTotal().equals(total)) {
+            productGateway.updateTotal(productId, total);
+        }
 
         List<ProductWarehouse> warehouses = productWarehouseService.mapToProductWarehouses(
                 productWarehouses,
