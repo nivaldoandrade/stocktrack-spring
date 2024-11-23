@@ -11,6 +11,7 @@ import com.nasa.stocktrack.interfaces.dtos.ListResponseDTO;
 import com.nasa.stocktrack.interfaces.dtos.category.CategoryDTO;
 import com.nasa.stocktrack.interfaces.dtos.category.CreateCategoryRequestDTO;
 import com.nasa.stocktrack.interfaces.dtos.category.UpdateCategoryRequestDTO;
+import com.nasa.stocktrack.interfaces.openapi.controllers.CategoryControllerOpenAPI;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
@@ -25,7 +26,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/categories")
 @AllArgsConstructor
-public class CategoryController {
+public class CategoryController implements CategoryControllerOpenAPI {
 
     private final CreateCategoryUseCase createCategoryUseCase;
     private final ShowCategoryUseCase showCategoryUseCase;
@@ -33,6 +34,7 @@ public class CategoryController {
     private final UpdateCategoryUseCase updateCategoryUseCase;
     private final DeleteCategoryUseCase deleteCategoryUseCase;
 
+    @Override
     @GetMapping
     public ResponseEntity<ListResponseDTO<CategoryDTO>> list(
             @RequestParam(name = "page", defaultValue = "0") @Min(0) Integer page,
@@ -50,6 +52,7 @@ public class CategoryController {
         return ResponseEntity.ok(ListResponseDTO.toResponse(categoryPaginatedList, CategoryDTO::toResponse));
     }
 
+    @Override
     @GetMapping("/{id}")
     public ResponseEntity<CategoryDTO> show(@ValidUUID @PathVariable String id) {
 
@@ -58,6 +61,7 @@ public class CategoryController {
         return ResponseEntity.ok(CategoryDTO.toResponse(category));
     }
 
+    @Override
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping()
     public ResponseEntity<CategoryDTO> create(@RequestBody @Validated CreateCategoryRequestDTO createCategoryRequestDTO) {
@@ -68,9 +72,10 @@ public class CategoryController {
         return ResponseEntity.created(uri).body(CategoryDTO.toResponse(category));
     }
 
+    @Override
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(
+    public ResponseEntity<Void> update(
             @ValidUUID @PathVariable String id,
             @RequestBody @Validated UpdateCategoryRequestDTO updateCategoryRequestDTO
     ) {
@@ -81,6 +86,7 @@ public class CategoryController {
         return ResponseEntity.noContent().build();
     }
 
+    @Override
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@ValidUUID @PathVariable String id) {
