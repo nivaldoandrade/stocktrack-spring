@@ -5,6 +5,7 @@ import com.nasa.stocktrack.domain.entities.User;
 import com.nasa.stocktrack.domain.enums.RoleEnum;
 import com.nasa.stocktrack.infra.constraints.EnumRolePattern;
 import com.nasa.stocktrack.infra.constraints.ValidPasswordPattern;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 
 public record CreateUserRequestDTO(
@@ -18,6 +19,7 @@ public record CreateUserRequestDTO(
         @ValidPasswordPattern(min = 6)
         String password,
 
+        @Schema(example = "USER or ADMIN", implementation = RoleEnum.class)
         @EnumRolePattern
         String role
 ) {

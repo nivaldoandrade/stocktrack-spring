@@ -12,9 +12,11 @@ import com.nasa.stocktrack.interfaces.dtos.ListResponseDTO;
 import com.nasa.stocktrack.interfaces.dtos.user.CreateUserRequestDTO;
 import com.nasa.stocktrack.interfaces.dtos.user.UpdateUserRequestDTO;
 import com.nasa.stocktrack.interfaces.dtos.user.UserDTO;
+import com.nasa.stocktrack.interfaces.openapi.controllers.UserControllerOpenAPI;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -27,7 +29,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/users")
 @AllArgsConstructor
-public class UserController {
+public class UserController implements UserControllerOpenAPI {
 
     private final CreateUserUseCase createUserUseCase;
     private final ShowUserUseCase showUserUseCase;
@@ -35,8 +37,9 @@ public class UserController {
     private final UpdateUserUseCase updateUserUseCase;
     private final DeleteUserUseCase deleteUserUseCase;
 
+    @Override
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ListResponseDTO<UserDTO>> list(
             @RequestParam(name = "page", defaultValue = "0") @Min(0) Integer page,
             @RequestParam(name = "size", defaultValue = "10") @Min(1) @Max(10) Integer size,
@@ -54,7 +57,8 @@ public class UserController {
         return ResponseEntity.ok(ListResponseDTO.toResponse(userPaginatedList, UserDTO::toResponse));
     }
 
-    @GetMapping("/me")
+    @Override
+    @GetMapping(value = "/me", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> me(Authentication authentication) {
         UserEntity userAuth = (UserEntity) authentication.getPrincipal();
         UUID userAuthId = userAuth.getId();
@@ -62,10 +66,11 @@ public class UserController {
         User user = showUserUseCase.execute(userAuthId);
 
         return ResponseEntity.ok(UserDTO.toResponse(user));
-     }
+    }
 
+    @Override
     @PreAuthorize("hasRole('ADMIN') or #id == principal.id.toString()")
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> show(@ValidUUID @PathVariable String id) {
 
         User user = showUserUseCase.execute(UUID.fromString(id));
@@ -74,8 +79,9 @@ public class UserController {
         return ResponseEntity.ok(UserDTO.toResponse(user));
     }
 
+    @Override
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> create(@Validated @RequestBody CreateUserRequestDTO createUserRequestDTO) {
 
         User user = createUserUseCase.execute(createUserRequestDTO.toDomain());
@@ -85,8 +91,9 @@ public class UserController {
         return ResponseEntity.created(uri).body(UserDTO.toResponse(user));
     }
 
+    @Override
     @PreAuthorize("hasRole('ADMIN') or #id == principal.id.toString()")
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> update(
             @ValidUUID @PathVariable String id,
             @Validated @RequestBody UpdateUserRequestDTO updateUserRequestDTO
@@ -96,8 +103,9 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    @Override
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/{id}")
+    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> delete(
             @ValidUUID @PathVariable String id,
             Authentication authentication
