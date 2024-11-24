@@ -54,15 +54,7 @@ public interface CategoryControllerOpenAPI {
             }
     )
     @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    content = {
-                            @Content(
-                                    schema = @Schema(implementation = ListResponseDTO.class),
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE
-                            )
-                    }
-            ),
+            @ApiResponse(responseCode = "200"),
             @ApiResponse(responseCode = "400", content = @Content),
             @ApiResponse(responseCode = "403", content = @Content)
     })
@@ -78,13 +70,7 @@ public interface CategoryControllerOpenAPI {
             description = "Get a Category by id. The response is object of the CategoryDTO schema type"
     )
     @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    content = @Content(
-                            schema = @Schema(implementation = CategoryDTO.class),
-                            mediaType = MediaType.APPLICATION_JSON_VALUE
-                    )
-            ),
+            @ApiResponse(responseCode = "200"),
             @ApiResponse(responseCode = "400", content = @Content),
             @ApiResponse(responseCode = "403", content = @Content),
             @ApiResponse(responseCode = "404", content = @Content)
@@ -96,13 +82,7 @@ public interface CategoryControllerOpenAPI {
             description = "Create a new Category by passing in a JSON representation of the CreateCategoryRequestDTO schema type"
     )
     @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    content = {@Content(
-                            schema = @Schema(implementation = CategoryDTO.class),
-                            mediaType = MediaType.APPLICATION_JSON_VALUE
-                    )}
-            ),
+            @ApiResponse(responseCode = "200" ),
             @ApiResponse(responseCode = "400", content = {@Content(
                     schema = @Schema(implementation = RestErrorResponseWithErrors.class),
                     mediaType = MediaType.APPLICATION_JSON_VALUE
@@ -118,7 +98,7 @@ public interface CategoryControllerOpenAPI {
             description = "Update a Category by id. passing in a JSON representation of the UpdateCategoryRequestDTO schema type"
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "204", content = @Content),
+            @ApiResponse(responseCode = "204"),
             @ApiResponse(responseCode = "400", content = {@Content(
                     schema = @Schema(implementation = RestErrorResponseWithErrors.class),
                     mediaType = MediaType.APPLICATION_JSON_VALUE
@@ -137,7 +117,7 @@ public interface CategoryControllerOpenAPI {
             description = "Delete a Category by id"
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "204", content = @Content),
+            @ApiResponse(responseCode = "204"),
             @ApiResponse(responseCode = "400", content = @Content),
             @ApiResponse(responseCode = "404", content = @Content)
     })
