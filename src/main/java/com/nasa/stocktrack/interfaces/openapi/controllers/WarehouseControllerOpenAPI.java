@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.UUID;
+
 @Tag(name = "Warehouse", description = "Warehouse management API")
 public interface WarehouseControllerOpenAPI {
 
@@ -73,7 +75,7 @@ public interface WarehouseControllerOpenAPI {
             @ApiResponse(responseCode = "403", content = @Content),
             @ApiResponse(responseCode = "404", content = @Content)
     })
-    ResponseEntity<WarehouseDTO> show(@ValidUUID @PathVariable String id);
+    ResponseEntity<WarehouseDTO> show(@Schema(allOf = {UUID.class}) @ValidUUID @PathVariable String id);
 
     @Operation(
             summary = "Create a Warehouse",
@@ -106,7 +108,7 @@ public interface WarehouseControllerOpenAPI {
             @ApiResponse(responseCode = "404", content = @Content),
     })
     ResponseEntity<Void> update(
-            @ValidUUID @PathVariable String id,
+            @Schema(allOf = {UUID.class}) @ValidUUID @PathVariable String id,
             @RequestBody @Validated UpdateWarehouseRequestDTO updateWarehouseRequestDTO
     );
 
@@ -119,5 +121,5 @@ public interface WarehouseControllerOpenAPI {
             @ApiResponse(responseCode = "400", content = @Content),
             @ApiResponse(responseCode = "404", content = @Content)
     })
-    ResponseEntity<Void> delete(@ValidUUID @PathVariable String id);
+    ResponseEntity<Void> delete(@Schema(allOf = {UUID.class}) @ValidUUID @PathVariable String id);
 }

@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @Tag(name = "Product", description = "Product management API")
 public interface ProductControllerOpenAPI {
@@ -91,7 +92,7 @@ public interface ProductControllerOpenAPI {
             @ApiResponse(responseCode = "403", content = @Content),
             @ApiResponse(responseCode = "404", content = @Content)
     })
-    ResponseEntity<ProductDTO> show(@ValidUUID @PathVariable String id);
+    ResponseEntity<ProductDTO> show(@Schema(allOf = {UUID.class}) @ValidUUID @PathVariable String id);
 
     @Operation(
             summary = "Create a Product",
@@ -140,7 +141,7 @@ public interface ProductControllerOpenAPI {
             @ApiResponse(responseCode = "404", content = @Content),
     })
     ResponseEntity<Void> update(
-            @ValidUUID @PathVariable String id,
+            @Schema(allOf = {UUID.class}) @ValidUUID @PathVariable String id,
             @ModelAttribute @Validated UpdateProductRequestDTO updateProductRequestDTO
     ) throws IOException;
 
@@ -154,7 +155,7 @@ public interface ProductControllerOpenAPI {
             @ApiResponse(responseCode = "404", content = @Content)
     })
     ResponseEntity<Void> createOrUpdateProductWarehouse(
-            @ValidUUID @PathVariable String productId,
+            @Schema(allOf = {UUID.class}) @ValidUUID @PathVariable String productId,
             @RequestBody @Validated ListCreateOrUpdateProductWarehouseRequestDTO request
     );
 
@@ -167,5 +168,5 @@ public interface ProductControllerOpenAPI {
             @ApiResponse(responseCode = "400", content = @Content),
             @ApiResponse(responseCode = "404", content = @Content)
     })
-    ResponseEntity<Void> delete(@ValidUUID @PathVariable String id);
+    ResponseEntity<Void> delete(@Schema(allOf = {UUID.class}) @ValidUUID @PathVariable String id);
 }

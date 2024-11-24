@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.UUID;
+
 @Tag(name = "User", description = "User management API")
 public interface UserControllerOpenAPI {
 
@@ -87,7 +89,7 @@ public interface UserControllerOpenAPI {
             @ApiResponse(responseCode = "403", content = @Content),
             @ApiResponse(responseCode = "404", content = @Content)
     })
-    ResponseEntity<UserDTO> show(@ValidUUID @PathVariable String id);
+    ResponseEntity<UserDTO> show(@Schema(allOf = {UUID.class}) @ValidUUID @PathVariable String id);
 
     @Operation(
             summary = "Create a User",
@@ -120,7 +122,7 @@ public interface UserControllerOpenAPI {
             @ApiResponse(responseCode = "404", content = @Content),
     })
     ResponseEntity<Void> update(
-            @ValidUUID @PathVariable String id,
+            @Schema(allOf = {UUID.class}) @ValidUUID @PathVariable String id,
             @Validated @RequestBody UpdateUserRequestDTO updateUserRequestDTO
     );
 
@@ -134,7 +136,7 @@ public interface UserControllerOpenAPI {
             @ApiResponse(responseCode = "404", content = @Content)
     })
     ResponseEntity<Void> delete(
-            @ValidUUID @PathVariable String id,
+            @Schema(allOf = {UUID.class}) @ValidUUID @PathVariable String id,
             Authentication authentication
     );
 }
