@@ -15,6 +15,7 @@ import com.nasa.stocktrack.interfaces.dtos.product.CreateProductRequestDTO;
 import com.nasa.stocktrack.interfaces.dtos.product.ProductDTO;
 import com.nasa.stocktrack.interfaces.dtos.product.UpdateProductRequestDTO;
 import com.nasa.stocktrack.interfaces.dtos.productWarehouse.ListCreateOrUpdateProductWarehouseRequestDTO;
+import com.nasa.stocktrack.interfaces.openapi.controllers.ProductControllerOpenAPI;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
@@ -35,7 +36,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/products")
 @AllArgsConstructor
-public class ProductController {
+public class ProductController implements ProductControllerOpenAPI {
 
     private final CreateProductUseCase createProductUseCase;
     private final ShowProductUseCase showProductUseCase;
@@ -45,7 +46,8 @@ public class ProductController {
     private final CreateOrUpdateProductWarehouseUseCase createOrUpdateProductWarehouseUseCase;
     private final GetImageProductUseCase getImageProductUseCase;
 
-    @GetMapping
+    @Override
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ListResponseDTO<ProductDTO>> list(
             @RequestParam(name = "page", defaultValue = "0") @Min(0) Integer page,
             @RequestParam(name = "size", defaultValue = "10") @Min(1) @Max(10) Integer size,
@@ -58,7 +60,8 @@ public class ProductController {
         return ResponseEntity.ok(ListResponseDTO.toResponse(productPaginatedList, ProductDTO::toResponse));
     }
 
-    @GetMapping("/images/{imageName}")
+    @Override
+    @GetMapping(value = "/images/{imageName}", produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     public ResponseEntity<Resource> getImage(@PathVariable String imageName) {
         InputStream imageStream = getImageProductUseCase.execute(imageName);
 
@@ -69,15 +72,17 @@ public class ProductController {
                 .body(new InputStreamResource(imageStream));
     }
 
-    @GetMapping("/{id}")
+    @Override
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ProductDTO> show(@ValidUUID @PathVariable String id) {
         Product product = showProductUseCase.execute(UUID.fromString(id));
 
         return ResponseEntity.ok(ProductDTO.toResponse(product));
     }
 
+    @Override
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE ,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ProductDTO> create(
             @ModelAttribute @Validated CreateProductRequestDTO createProductRequestDTO
     ) throws IOException {
@@ -93,8 +98,9 @@ public class ProductController {
         return ResponseEntity.created(uri).body(ProductDTO.toResponse(product));
     }
 
+    @Override
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> update(
             @ValidUUID @PathVariable String id,
             @ModelAttribute @Validated UpdateProductRequestDTO updateProductRequestDTO
@@ -110,8 +116,9 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
+    @Override
     @PreAuthorize("hasRole('ADMIN')")
-    @PatchMapping("/{productId}/warehouses")
+    @PatchMapping(value = "/{productId}/warehouses", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createOrUpdateProductWarehouse(
             @ValidUUID @PathVariable String productId,
             @RequestBody @Validated ListCreateOrUpdateProductWarehouseRequestDTO request
@@ -125,8 +132,9 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
+    @Override
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/{id}")
+    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> delete(@ValidUUID @PathVariable String id) {
         deleteProductUseCase.execute(UUID.fromString(id));
 
