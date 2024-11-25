@@ -262,4 +262,20 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(statusCode).body(error);
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<RestErrorResponse> handleException(Exception e) {
+        int statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
+
+        e.printStackTrace();
+
+
+        RestErrorResponse error = new RestErrorResponse(
+                statusCode,
+                "Internal Server Error",
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(statusCode).body(error);
+    }
 }
