@@ -1,12 +1,12 @@
 package com.nasa.stocktrack.infra.config.AWS;
 
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.BasicAWSCredentials;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 
 @Getter
 @Setter
@@ -18,8 +18,10 @@ public class AWSConfig {
     private String secretKey;
 
     @Bean
-    public AWSCredentials awsCredentials() {
-        return new BasicAWSCredentials(accessKey, secretKey);
+    public StaticCredentialsProvider awsCredentials() {
+        AwsBasicCredentials awsBasicCredentials =  AwsBasicCredentials.create(accessKey, secretKey);
+
+        return StaticCredentialsProvider.create(awsBasicCredentials);
     }
 
 }

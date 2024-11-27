@@ -1,14 +1,13 @@
 package com.nasa.stocktrack.infra.config.AWS;
 
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
 
 @Getter
 @Setter
@@ -17,17 +16,17 @@ import org.springframework.context.annotation.Configuration;
 public class S3Config {
     private String region;
 
-    private final AWSCredentials awsCredentials;
+    private final StaticCredentialsProvider credentialsProvider;
 
-    public S3Config(AWSCredentials awsCredentials) {
-        this.awsCredentials = awsCredentials;
+    public S3Config(StaticCredentialsProvider credentialsProvider) {
+        this.credentialsProvider = credentialsProvider;
     }
 
     @Bean
-    public AmazonS3 amazonS3() {
-        return AmazonS3ClientBuilder.standard()
-                .withRegion(region)
-                .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
+    public S3Client s3Client() {
+        return S3Client.builder()
+                .region(Region.of(region))
+                .credentialsProvider(credentialsProvider)
                 .build();
     }
 }
