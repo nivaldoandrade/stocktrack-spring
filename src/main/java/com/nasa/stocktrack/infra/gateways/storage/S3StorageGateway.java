@@ -1,9 +1,13 @@
 package com.nasa.stocktrack.infra.gateways.storage;
 
 import com.nasa.stocktrack.application.gateways.FileStorageGateway;
+import com.nasa.stocktrack.infra.exceptions.FileStorageException;
+import com.nasa.stocktrack.infra.utis.TikaUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.*;
 
@@ -26,8 +30,24 @@ public class S3StorageGateway implements FileStorageGateway {
 
     @Override
     public void saveFile(InputStream content, String filename) {
-        System.out.println(bucketName);
-        System.out.println("SaveFile: S3");
+        try {
+            byte[] fileBytes = content.readAllBytes();
+
+            String mineType = TikaUtils.getMimeType(fileBytes);
+
+            PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(filename)
+                    .contentType(mineType)
+                    .build();
+
+            s3Client.putObject(putObjectRequest, RequestBody.fromBytes(fileBytes));
+        } catch (Exception e) {
+            throw new FileStorageException("Error storing file "
+                    + filename
+                    + ", please try again"
+            );
+        }
     }
 
     @Override
