@@ -1,11 +1,15 @@
 package com.nasa.stocktrack.infra.config.storage;
 
+import com.nasa.stocktrack.infra.exceptions.FileStorageException;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 
 @Getter
@@ -19,6 +23,8 @@ public class FileStorageProperties {
     private Local local = new Local();
 
     private S3 s3 = new S3();
+
+    private Path localStorageLocation;
 
     public enum StorageType {
         LOCAL, S3
@@ -54,7 +60,15 @@ public class FileStorageProperties {
     }
 
     private void createLocalDir() {
-        //Implement logic local folder creation
+        Path uploadLocalDirPath = Paths.get(local.getUploadDir()).toAbsolutePath().normalize();
+
+        try {
+            Files.createDirectories(uploadLocalDirPath);
+
+            this.localStorageLocation = uploadLocalDirPath;
+        } catch(Exception e) {
+            throw new FileStorageException("Error creating local folder where files will be stored");
+        }
     }
 
     private void checkEnvS3() {

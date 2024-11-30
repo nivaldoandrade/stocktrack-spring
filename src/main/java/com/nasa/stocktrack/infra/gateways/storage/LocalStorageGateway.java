@@ -1,9 +1,9 @@
 package com.nasa.stocktrack.infra.gateways.storage;
 
 import com.nasa.stocktrack.application.gateways.FileStorageGateway;
+import com.nasa.stocktrack.infra.config.storage.FileStorageProperties;
 import com.nasa.stocktrack.infra.exceptions.FileNotFoundException;
 import com.nasa.stocktrack.infra.exceptions.FileStorageException;
-import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
 import java.io.FileInputStream;
@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 
 @Component
@@ -19,17 +18,8 @@ public class LocalStorageGateway implements FileStorageGateway {
 
     private final Path fileStorageLocation;
 
-    public LocalStorageGateway() {
-        this.fileStorageLocation = Paths.get("uploads").toAbsolutePath().normalize();
-    }
-
-    @PostConstruct
-    public void init() {
-        try {
-            Files.createDirectories(fileStorageLocation);
-        } catch (Exception e) {
-            throw new FileStorageException("Error creating folder where files will be stored");
-        }
+    public LocalStorageGateway(FileStorageProperties fileStorageProperties) {
+        this.fileStorageLocation = fileStorageProperties.getLocalStorageLocation();
     }
 
     @Override
