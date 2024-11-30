@@ -72,6 +72,16 @@ public class FileStorageProperties {
     }
 
     private void checkEnvS3() {
-        //Implement logic check env S3
+        if(s3.getBucketName() == null || s3.getBucketName().isEmpty()) {
+            throw new IllegalArgumentException(
+                    "S3 Bucket name must not be null. Check application.properties!"
+            );
+        }
+
+        if(s3.getRegion() == null || s3.getRegion().isEmpty()) {
+            throw new IllegalArgumentException(
+                    "S3 Region must not be null. Check application.properties!"
+            );
+        }
     }
 }

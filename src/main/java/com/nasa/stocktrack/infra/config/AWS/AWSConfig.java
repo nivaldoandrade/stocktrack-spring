@@ -2,6 +2,7 @@ package com.nasa.stocktrack.infra.config.AWS;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +13,7 @@ import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 @Setter
 @Configuration
 @ConfigurationProperties(prefix = "aws.credentials")
+@ConditionalOnProperty(name = "storage.type", havingValue = "S3")
 public class AWSConfig {
     private String accessKey;
 

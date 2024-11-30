@@ -1,39 +1,27 @@
 package com.nasa.stocktrack.infra.config.storage;
 
+import com.nasa.stocktrack.infra.config.storage.FileStorageProperties.StorageType;
 import com.nasa.stocktrack.application.gateways.FileStorageGateway;
 import com.nasa.stocktrack.infra.gateways.storage.LocalStorageGateway;
 import com.nasa.stocktrack.infra.gateways.storage.S3StorageGateway;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class FileStorageFactory {
+    private final FileStorageProperties fileStorageProperties;
 
-    @Value("${storage.type}")
-    private String storageType;
-
-    private final LocalStorageGateway localStorageGateway;
-
-    private final S3StorageGateway s3StorageGateway;
-
-    public FileStorageFactory(
-            LocalStorageGateway localStorageGateway,
-            S3StorageGateway s3StorageGateway
-    ) {
-        this.localStorageGateway = localStorageGateway;
-        this.s3StorageGateway = s3StorageGateway;
+    public FileStorageFactory(FileStorageProperties fileStorageProperties) {
+        this.fileStorageProperties = fileStorageProperties;
     }
 
     public FileStorageGateway fileStorageGateway() {
-        System.out.println(storageType);
+        StorageType storageType = fileStorageProperties.getType();
 
         return switch (storageType) {
-            case "s3":
-                yield s3StorageGateway;
-            case "local":
-                yield localStorageGateway;
-            default:
-                throw new IllegalArgumentException("Invalid file storage type: " + storageType);
+            case S3:
+                yield new S3StorageGateway(fileStorageProperties);
+            case LOCAL:
+                yield new LocalStorageGateway(fileStorageProperties);
         };
     }
 }
