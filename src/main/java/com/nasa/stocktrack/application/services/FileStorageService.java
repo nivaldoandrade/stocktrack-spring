@@ -1,6 +1,7 @@
 package com.nasa.stocktrack.application.services;
 
 import com.nasa.stocktrack.application.gateways.FileStorageGateway;
+import com.nasa.stocktrack.domain.entities.RecoveredFile;
 
 import java.io.InputStream;
 
@@ -18,7 +19,7 @@ public class FileStorageService {
         return generateFileName(originalFilename);
     }
 
-    public InputStream getFile(String filename) {
+    public RecoveredFile getFile(String filename) {
         return fileStorageGateway.getFile(filename);
     }
 

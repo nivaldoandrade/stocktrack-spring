@@ -1,10 +1,12 @@
 package com.nasa.stocktrack.application.gateways;
 
+import com.nasa.stocktrack.domain.entities.RecoveredFile;
+
 import java.io.InputStream;
 
 public interface FileStorageGateway {
 
-    InputStream getFile(String filename);
+    RecoveredFile getFile(String filename);
 
     void saveFile(InputStream content, String filename);
 

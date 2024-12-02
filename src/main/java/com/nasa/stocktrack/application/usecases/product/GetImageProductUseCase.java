@@ -1,8 +1,7 @@
 package com.nasa.stocktrack.application.usecases.product;
 
 import com.nasa.stocktrack.application.services.FileStorageService;
-
-import java.io.InputStream;
+import com.nasa.stocktrack.domain.entities.RecoveredFile;
 
 public class GetImageProductUseCase {
 
@@ -12,7 +11,7 @@ public class GetImageProductUseCase {
         this.fileStorageService = fileStorageService;
     }
 
-    public InputStream execute(String imageName) {
+    public RecoveredFile execute(String imageName) {
         return fileStorageService.getFile(imageName);
     }
 }

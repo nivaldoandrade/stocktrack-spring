@@ -6,6 +6,7 @@ import com.nasa.stocktrack.domain.dtos.PaginatedList;
 import com.nasa.stocktrack.domain.entities.FileData;
 import com.nasa.stocktrack.domain.entities.Product;
 import com.nasa.stocktrack.domain.entities.ProductWarehouse;
+import com.nasa.stocktrack.domain.entities.RecoveredFile;
 import com.nasa.stocktrack.infra.constraints.EnumOrderByPattern;
 import com.nasa.stocktrack.infra.constraints.ValidUUID;
 import com.nasa.stocktrack.interfaces.ResourceURIHelper;
@@ -20,7 +21,8 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,7 +30,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
@@ -62,14 +63,20 @@ public class ProductController implements ProductControllerOpenAPI {
 
     @Override
     @GetMapping(value = "/images/{imageName}", produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
-    public ResponseEntity<Resource> getImage(@PathVariable String imageName) {
-        InputStream imageStream = getImageProductUseCase.execute(imageName);
+    public ResponseEntity<?> getImage(@PathVariable String imageName) {
+        RecoveredFile file = getImageProductUseCase.execute(imageName);
+
+        if(file.getUrl() != null) {
+            return ResponseEntity.status(HttpStatus.FOUND)
+                    .header(HttpHeaders.LOCATION, file.getUrl())
+                    .build();
+        }
 
         MediaType contentType = imageName.endsWith(".png") ? MediaType.IMAGE_PNG : MediaType.IMAGE_JPEG;
 
         return ResponseEntity.ok()
                 .contentType(contentType)
-                .body(new InputStreamResource(imageStream));
+                .body(new InputStreamResource(file.getInputStream()));
     }
 
     @Override

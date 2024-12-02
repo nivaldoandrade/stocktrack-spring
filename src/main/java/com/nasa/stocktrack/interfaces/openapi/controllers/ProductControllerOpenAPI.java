@@ -17,7 +17,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -80,7 +79,7 @@ public interface ProductControllerOpenAPI {
             @ApiResponse(responseCode = "403", content = @Content),
             @ApiResponse(responseCode = "404", content = @Content),
     })
-    ResponseEntity<Resource> getImage(@PathVariable String imageName);
+    ResponseEntity<?> getImage(@PathVariable String imageName);
 
     @Operation(
             summary = "Retrieve a Product by id",

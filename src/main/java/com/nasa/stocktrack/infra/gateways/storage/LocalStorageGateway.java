@@ -1,10 +1,10 @@
 package com.nasa.stocktrack.infra.gateways.storage;
 
 import com.nasa.stocktrack.application.gateways.FileStorageGateway;
+import com.nasa.stocktrack.domain.entities.RecoveredFile;
 import com.nasa.stocktrack.infra.config.storage.FileStorageProperties;
 import com.nasa.stocktrack.infra.exceptions.FileNotFoundException;
 import com.nasa.stocktrack.infra.exceptions.FileStorageException;
-import org.springframework.stereotype.Component;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -22,7 +22,7 @@ public class LocalStorageGateway implements FileStorageGateway {
     }
 
     @Override
-    public InputStream getFile(String filename) {
+    public RecoveredFile getFile(String filename) {
         try {
             Path targetLocation = this.fileStorageLocation.resolve(filename);
 
@@ -30,7 +30,9 @@ public class LocalStorageGateway implements FileStorageGateway {
                 throw new FileNotFoundException(filename);
             }
 
-            return new FileInputStream(targetLocation.toFile());
+            InputStream fileInputStream = new FileInputStream(targetLocation.toFile());
+
+            return new RecoveredFile(fileInputStream);
         } catch (IOException e) {
             throw new FileStorageException("File cannot be recovered");
         }
