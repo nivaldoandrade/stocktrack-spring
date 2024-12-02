@@ -5,6 +5,7 @@ import com.nasa.stocktrack.infra.persistence.entities.RoleEntity;
 import com.nasa.stocktrack.infra.persistence.repositories.RoleRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Component
+@Order(1)
 @Transactional
 public class RoleSeeder implements CommandLineRunner {
 

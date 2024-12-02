@@ -19,4 +19,6 @@ public interface UserRepository extends JpaRepository<UserEntity, UUID> {
     Page<UserEntity> findAll(@Param("name") String name, Pageable pageable);
 
     Optional<UserEntity> findByUsername(String username);
+
+    Optional<UserEntity> findByRoleId(UUID roleId);
 }
