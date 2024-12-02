@@ -76,6 +76,11 @@ public class S3StorageGateway implements FileStorageGateway {
 
     @Override
     public void deleteFile(String filename) {
+        DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+                .key(filename)
+                .bucket(bucketName)
+                .build();
 
+       s3Client.deleteObject(deleteObjectRequest);
     }
 }
