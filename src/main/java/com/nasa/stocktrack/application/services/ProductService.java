@@ -3,129 +3,49 @@ package com.nasa.stocktrack.application.services;
 import com.nasa.stocktrack.application.gateways.ProductGateway;
 import com.nasa.stocktrack.application.usecases.category.ShowCategoryUseCase;
 import com.nasa.stocktrack.domain.entities.Category;
-import com.nasa.stocktrack.domain.entities.FileData;
 import com.nasa.stocktrack.domain.entities.Product;
-import com.nasa.stocktrack.domain.entities.ProductWarehouse;
 import com.nasa.stocktrack.domain.exceptions.ProductExistsException;
-import com.nasa.stocktrack.domain.exceptions.ProductNotFoundException;
-import jakarta.transaction.Transactional;
 
 import java.io.InputStream;
-import java.util.List;
 import java.util.UUID;
 
 public class ProductService {
 
     private final ProductGateway productGateway;
 
-    private final ShowCategoryUseCase showCategoryUseCase;
-
     private final FileStorageService fileStorageService;
 
-    private final ProductWarehouseService productWarehouseService;
+    private final ShowCategoryUseCase showCategoryUseCase;
+
 
     public ProductService(
             ProductGateway productGateway,
-            ShowCategoryUseCase showCategoryUseCase,
             FileStorageService fileStorageService,
-            ProductWarehouseService productWarehouseService
+            ShowCategoryUseCase showCategoryUseCase
     ) {
         this.productGateway = productGateway;
-        this.showCategoryUseCase = showCategoryUseCase;
         this.fileStorageService = fileStorageService;
-        this.productWarehouseService = productWarehouseService;
+        this.showCategoryUseCase = showCategoryUseCase;
     }
 
-    @Transactional
-    public Product create(Product product, FileData fileData) {
-        this.validateNameUniqueness(product.getName());
-        this.validateCodeUniqueness(product.getCode());
-
-        String fileName = fileData != null
-                ? fileStorageService.generateFilename(fileData.getFilename())
-                : null;
-
-        product.setImage(fileName);
-
-        Category category = showCategoryUseCase.execute(product.getCategory().getId());
-
-        product.setCategory(category);
-
-        int total = product.getProductWarehouses()
-                .stream().mapToInt(ProductWarehouse::getQuantity).sum();
-
-        product.setTotal(total);
-
-        Product newProduct =  productGateway.create(product);
-
-        List<ProductWarehouse> productWarehouses = productWarehouseService.mapToProductWarehouses(
-                product.getProductWarehouses(),
-                newProduct
-        );
-
-        productWarehouses =  productWarehouseService.saveAll(productWarehouses);
-
-        newProduct.setProductWarehouses(productWarehouses);
-
-        return newProduct;
+    public String generateImageName(String filename) {
+        return fileStorageService.generateFilename(filename);
     }
 
-    @Transactional
-    public void update(Product product, FileData fileData) {
-        Product productExisting = productGateway.findByIdWithoutWarehouses(product.getId());
+    public Category getCategoryById(UUID categoryId) {
+        return showCategoryUseCase.execute(categoryId);
+    }
 
-        if(productExisting == null) {
-            throw new ProductNotFoundException();
-        }
+    public Product getByProductIdWithoutWarehouses(UUID productId) {
+        return productGateway.findByIdWithoutWarehouses(productId);
+    }
 
-        boolean hasSameCategoryId = product.getCategory().getId().equals(productExisting.getCategory().getId());
+    public Product create(Product product) {
+        return productGateway.create(product);
+    }
 
-        if(!hasSameCategoryId) {
-            Category newCategory = showCategoryUseCase.execute(product.getCategory().getId());
-
-            product.setCategory(newCategory);
-        }
-
-        if(!product.getName().equals(productExisting.getName())) {
-            this.validateNameUniqueness(product.getName());
-
-        }
-
-        if(!product.getCode().equals(productExisting.getCode())) {
-            this.validateCodeUniqueness(product.getCode());
-
-        }
-
-        String fileName = fileData != null
-                ? fileStorageService.generateFilename(fileData.getFilename())
-                : productExisting.getImage();
-
-        product.setImage(fileName);
-
+    public void update(Product product) {
         productGateway.update(product);
-
-        if(fileData != null) {
-            this.saveProductImage(fileData.getContent(), fileName);
-
-            if(productExisting.getImage() != null) {
-                this.deleteProductImage(productExisting.getImage());
-            }
-        }
-    }
-
-    @Transactional
-    public void delete(UUID id) {
-        Product product = productGateway.findById(id);
-
-        if(product == null) {
-            throw new ProductNotFoundException();
-        }
-
-        productGateway.delete(product);
-
-        if(product.getImage() != null) {
-            fileStorageService.deleteFile(product.getImage());
-        }
     }
 
     public void saveProductImage(InputStream content, String fileName) {
@@ -136,7 +56,7 @@ public class ProductService {
         fileStorageService.deleteFile(fileName);
     }
 
-    private void validateNameUniqueness(String name) {
+    public void validateNameUniqueness(String name) {
         Product product = productGateway.findByName(name);
 
         if(product != null) {
@@ -144,7 +64,7 @@ public class ProductService {
         }
     }
 
-    private void validateCodeUniqueness(String code) {
+    public void validateCodeUniqueness(String code) {
         Product product = productGateway.findByCode(code);
 
         if(product != null) {

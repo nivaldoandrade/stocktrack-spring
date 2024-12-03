@@ -6,7 +6,6 @@ import com.nasa.stocktrack.application.services.ProductService;
 import com.nasa.stocktrack.application.services.ProductWarehouseService;
 import com.nasa.stocktrack.application.usecases.category.ShowCategoryUseCase;
 import com.nasa.stocktrack.application.usecases.product.*;
-import jakarta.transaction.Transactional;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,8 +13,14 @@ import org.springframework.context.annotation.Configuration;
 public class ProductDependencyInjection {
 
     @Bean
-    CreateProductUseCase createProductUseCase(ProductService productService) {
-        return new CreateProductUseCase(productService);
+    CreateProductUseCase createProductUseCase(
+            ProductService productService,
+            ProductWarehouseService productWarehouseService
+    ) {
+        return new CreateProductUseCase(
+                productService,
+                productWarehouseService
+        );
     }
 
     @Bean
@@ -39,22 +44,20 @@ public class ProductDependencyInjection {
     }
 
     @Bean
-    DeleteProductUseCase deleteProductUseCase(ProductService productService) {
-        return new DeleteProductUseCase(productService);
+    DeleteProductUseCase deleteProductUseCase(ProductGateway productGateway, FileStorageService fileStorageService) {
+        return new DeleteProductUseCase(productGateway, fileStorageService);
     }
 
     @Bean
     ProductService productService(
             ProductGateway productGateway,
-            ShowCategoryUseCase showCategoryUseCase,
             FileStorageService fileStorageService,
-            ProductWarehouseService productWarehouseService
+            ShowCategoryUseCase showCategoryUseCase
     ) {
         return new ProductService(
                 productGateway,
-                showCategoryUseCase,
                 fileStorageService,
-                productWarehouseService
+                showCategoryUseCase
         );
     }
 }
