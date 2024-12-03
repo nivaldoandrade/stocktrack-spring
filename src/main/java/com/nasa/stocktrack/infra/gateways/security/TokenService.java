@@ -1,27 +1,29 @@
 package com.nasa.stocktrack.infra.gateways.security;
 
 import com.nasa.stocktrack.application.gateways.TokenGateway;
+import com.nasa.stocktrack.infra.config.security.JWTProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.UUID;
 import java.util.function.Function;
 
 @Component
 public class TokenService implements TokenGateway {
 
-    @Value("${security.jwt.secret-key}")
     private String secretKey;
 
-    @Value("${security.jwt.expires-in}")
     private long expiresIn;
+
+    public TokenService(JWTProperties jwtProperties) {
+        this.secretKey = jwtProperties.getSecretKey();
+        this.expiresIn = jwtProperties.getExpiresIn();
+    }
 
     @Override
     public String generateToken(String userId) {
