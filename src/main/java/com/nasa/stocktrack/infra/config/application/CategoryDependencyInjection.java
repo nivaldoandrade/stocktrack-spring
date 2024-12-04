@@ -1,4 +1,4 @@
-package com.nasa.stocktrack.infra.config;
+package com.nasa.stocktrack.infra.config.application;
 
 import com.nasa.stocktrack.application.gateways.CategoryGateway;
 import com.nasa.stocktrack.application.gateways.ProductGateway;
