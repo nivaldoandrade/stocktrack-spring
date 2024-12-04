@@ -13,11 +13,16 @@ import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 @Setter
 @Configuration
 @ConfigurationProperties(prefix = "aws.credentials")
-@ConditionalOnProperty(name = "storage.type", havingValue = "S3")
+@ConditionalOnProperty(name = "aws.enabled", havingValue = "true")
 public class AWSConfig {
     private String accessKey;
 
     private String secretKey;
+
+    public AWSConfig(AWSProperties awsProperties) {
+        this.accessKey = awsProperties.getAccessKey();
+        this.secretKey = awsProperties.getAccessKey();
+    }
 
     @Bean
     public StaticCredentialsProvider awsCredentials() {
