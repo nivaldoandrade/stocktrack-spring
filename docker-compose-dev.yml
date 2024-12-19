@@ -1,0 +1,11 @@
+name: stocktrack-postgres-test
+
+services:
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=stocktracktest
+    ports:
+      - "5432:5432"
