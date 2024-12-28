@@ -1,0 +1,40 @@
+name: stocktrack-postgres-full
+
+services:
+  db:
+    image: postgres
+    restart: unless-stopped
+    container_name: db
+    environment:
+      - POSTGRES_USER=${USERNAME_DB}
+      - POSTGRES_PASSWORD=${PASSWORD_DB}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - "5432:5432"
+
+  app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: app
+    restart: on-failure
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+#    environment:
+#      - DB_LOCALHOST=$DB_LOCALHOST
+#      - DB_PORT=$DB_PORT
+#      - DB_NAME=$DB_NAME
+#      - USERNAME_DB=$USERNAME_DB
+#      - PASSWORD_DB=$PASSWORD_DB
+#      - JWT_SECRET_KEY=$JWT_SECRET_KEY
+#      - JWT_EXPIRES_IN=$JWT_EXPIRES_IN
+#      - AWS_ENABLED=$AWS_ENABLED
+#      - AWS_CREDENTIALS_ACCESSKEY=$AWS_CREDENTIALS_ACCESSKEY
+#      - AWS_CREDENTIALS_SECRETKEY=$AWS_CREDENTIALS_SECRETKEY
+#      - AWS_S3_REGION=$AWS_S3_REGION
+#      - AWS_S3_BUCKETNAME=$AWS_S3_BUCKETNAME
+#      - STORAGE_TYPE=$STORAGE_TYPE

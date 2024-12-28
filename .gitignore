@@ -35,3 +35,7 @@ build/
 ### Uploads folder ###
 uploads
 
+
+### Docker folder ###
+docker/.env
+
