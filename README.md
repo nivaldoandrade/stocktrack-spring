@@ -1,3 +1,42 @@
+## Rodando em modo desenvolvimento com banco de dados dockerizado
+
+### 1. Clone o Repositório
+
+Clone o repositório para o seu ambiente local:
+```bash
+  git clone https://github.com/nivaldoandrade/stocktrack-spring
+```
+
+### 2. Configurar as Variáveis de Ambiente 
+
+Edite as variáveis de ambiente no arquivo localizado em src/main/resources/application-dev.properties. Para mais informações sobre as variáveis de ambiente de desenvolvimento, consulte a seção: [Configuração do Arquivo application-dev.properties](#configuração-do-arquivo-application-devproperties)
+
+#### **Observações Importantes:**
+1. **Banco de Dados Dockerizado:** Não é necessário preencher as variáveis `spring.datasource.url`, `spring.datasource.username` e `spring.datasource.password`, pois as configurações serão automaticamente gerenciadas pelo arquivo `docker-compose-dev.yml` na raiz do projeto;
+2. **Ativação do Docker Compose:** Para utilizar o banco de dados com o Docker, defina a variável `spring.docker.compose.file` apontando para o caminho do arquivo `docker-compose-dev.yml`;
+3. **Sincronização de Variáveis:** Se alterar o valor da variável `POSTGRES_DB` no arquivo `docker-compose-dev.yml`, lembre-se de atualizar a variável `spring.flyway.placeholders.db_name` no arquivo `application-dev.properties` com o mesmo valor.
+
+### 3. Iniciando a aplicação 
+
+Você pode iniciar a aplicação de duas formas:
+
+1.	Executando a classe principal `StockTrackApplication` (src/main/java/StockTrackApplication.java) diretamente na sua IDE preferida.
+2.	Através do terminal, seguindo os passos abaixo:
+
+Passo a passo:
+
+Entre no diretório do projeto:
+
+```bash
+  cd stocktrack-api
+```
+
+Inicie a aplicação utilizando o profile dev com o seguinte comando:
+
+```bash
+  ./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
+```
+
 ## Variáveis de Ambiente
 
 ### Configuração do Arquivo `application-dev.properties`
@@ -8,39 +47,48 @@ Este arquivo contém as propriedades utilizadas no ambiente de desenvolvimento d
 
 - **`spring.datasource.url`**  
   URL de conexão com o banco de dados PostgreSQL.  
-  **Formato:** `jdbc:postgresql://${DEV_DB_HOSTNAME:localhost}:${DEV_DB_PORT:5432}/${DEV_DB_NAME:stocktrack-test}`
-    - Utiliza variáveis de ambiente:
-        - `DEV_DB_HOSTNAME`: Host do banco de dados - Padrão: `localhost`.
-        - `DEV_DB_PORT`: Porta do banco de dados - Padrão: `5432`.
-        - `DEV_DB_NAME`: Nome do banco de dados - Padrão: `stocktrack-test`.
+  **Formato:** `jdbc:postgresql://localhost:5432/stocktracktest`
+  - Valor padrão:  
+    - host: localhost
+    - porta: 5432
+    - nome do banco: stocktracktest
 
 - **`spring.datasource.username`**  
   Nome do usuário do banco de dados.
-    - Variável de ambiente: `DEV_USERNAME_DB` - Padrão: `root`.
+    - Padrão: `root`
 
 - **`spring.datasource.password`**  
   Senha do banco de dados.
-    - Variável de ambiente: `DEV_PASSWORD_DB` - Padrão: `root`.
+    - Padrão: `root`
 
 - **`spring.flyway.placeholders.db_name`**  
   Placeholder utilizado pelo Flyway para o nome do banco de dados.
-    - Variável de ambiente: `DEV_DB_NAME` - Padrão: `stocktrack-test`.
+    - Padrão: `stocktracktest`
 
 - **`spring.flyway.placeholders.db_timezone`**  
   Placeholder utilizado pelo Flyway para o timezone.
-    - Variável de ambiente: `DEV_DB_TIMEZONE` - Padrão: `America/Sao_Paulo`.
+    - Padrão: `America/Sao_Paulo`
 
+---
+
+#### Spring Docker
+
+- **`spring.docker.compose.enabled`**  
+  Ativa ou desativa a utilização do docker compose. (Opcional).
+  - **`spring.docker.compose.file`**  
+    Define o nome do arquivo docker compose. Ao definir essa variável, não é necessário ativar explicitamente a variável `spring.docker.compose.enabled`.
+  
 ---
 
 #### Segurança e JWT
 
 - **`security.jwt.secret-key`**  
   Chave secreta usada para assinar tokens JWT.
-    - Variável de ambiente: `DEV_JWT_SECRET_KEY` - Padrão: `93624b6ac3de8f0d54043c9d4c6827d2b921127dd58f2699610cf064e8659113`.
+    - Padrão: `93624b6ac3de8f0d54043c9d4c6827d2b921127dd58f2699610cf064e8659113`
 
 - **`security.jwt.expires-in`**  
   Tempo de expiração do token JWT em milissegundos.
-    - Variável de ambiente: `DEV_JWT_EXPIRES_IN` - Padrão: `86400000` (1 dia).
+    - Padrão: `86400000` (1 dia)
 
 ---
 
@@ -48,27 +96,23 @@ Este arquivo contém as propriedades utilizadas no ambiente de desenvolvimento d
 
 - **`aws.enabled`**  
   Ativa ou desativa a utilização de serviços da AWS.
-    - Variável de ambiente: `DEV_AWS_ENABLED` - Padrão: `false`.
+    - Padrão: `false`
 
 - **`aws.credentials.accessKey`**  
   Access Key da AWS usada para autenticação. Deve ser configurada apenas se aws.enabled=true.
-    - Variável de ambiente: `DEV_AWS_CREDENTIALS_ACCESSKEY`.
 
 - **`aws.credentials.secretKey`**  
   Secret Key da AWS usada para autenticação. Deve ser configurada apenas se aws.enabled=true.
-    - Variável de ambiente: `DEV_AWS_CREDENTIALS_SECRETKEY`.
 
 ---
 
 #### S3
 
 - **`storage.s3.region`**  
-  Região configurada para o bucket no S3. 
-    - Variável de ambiente: `DEV_AWS_S3_REGION`.
+  Região configurada para o bucket no S3.
 
 - **`storage.s3.bucket-name`**  
   Nome do bucket usado para armazenar arquivos no S3.
-    - Variável de ambiente: `DEV_AWS_S3_BUCKETNAME`.
 
 **Atenção:** Ao utilizar S3 é necessário configurar as propriedades da [AWS](#aws).
 
@@ -86,7 +130,7 @@ Este arquivo contém as propriedades utilizadas no ambiente de desenvolvimento d
 
 - **`storage.type`**  
   Define o tipo de armazenamento a ser utilizado.
-    - Variável de ambiente: `DEV_STORAGE_TYPE` - Padrão: `local` - Opções válidas:
+    - Padrão: `local` - Opções válidas:
         - local: Para armazenamento local no servidor.
         - s3: Para armazenamento na nuvem usando Amazon S3.
       
