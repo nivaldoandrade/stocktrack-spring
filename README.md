@@ -78,6 +78,40 @@ Inicie a aplicação utilizando o profile dev com o seguinte comando:
 ```
 ---
 
+## Rodando em modo produção com docker compose
+
+### 1. Clone o Repositório
+
+Clone o repositório para o seu ambiente local:
+```bash
+  git clone https://github.com/nivaldoandrade/stocktrack-spring
+```
+
+### 2. Configurar as Variáveis de Ambiente
+
+Renomei o arquivo `.env.example` para `.env` dentro da pasta `docker` e edite as variáveis de ambiente. Para mais informações sobre as variáveis de ambiente de desenvolvimento, consulte a seção: [Configuração do Arquivo application-prod.properties](#configuração-do-arquivo-application-prodproperties)
+
+#### **Observações Importantes:**
+1. **Sincronização de Variáveis:** 
+   - Lembre-se de atualizar a variável `DB_PORT` no arquivo `.env` com o mesmo número da porta do banco da dados configurada no arquivo docker compose `docker-compose-full.yml`. Por padrão, o docker compose já utiliza a porta padrão do PostgreSQL. 
+   - O valor da variável `DB_LOCALHOST` no arquivo `.env` tem que ser o mesmo nome do serviço do banco de dados configurado no `docker-compose-full`. Esse nome é usado para resolver o host do banco de dados dentro do container da aplicação.
+
+### 3. Iniciando a aplicação
+
+Entre no diretório do projeto:
+
+```bash
+  cd stocktrack-api
+```
+
+Inicie a aplicação utilizando o seguinte comando:
+
+```bash
+  docker compose -f docker/docker-compose-full.yml up
+```
+
+---
+
 ## Variáveis de Ambiente
 
 ### Configuração do Arquivo `application-dev.properties`
@@ -116,8 +150,9 @@ Este arquivo contém as propriedades utilizadas no ambiente de desenvolvimento d
 
 - **`spring.docker.compose.enabled`**  
   Ativa ou desativa a utilização do docker compose. (Opcional).
-  - **`spring.docker.compose.file`**  
-    Define o nome do arquivo docker compose. Ao definir essa variável, não é necessário ativar explicitamente a variável `spring.docker.compose.enabled`.
+
+- **`spring.docker.compose.file`**  
+  Define o nome do arquivo docker compose. Ao definir essa variável, não é necessário ativar explicitamente a variável `spring.docker.compose.enabled`.
   
 ---
 
