@@ -36,6 +36,47 @@ Inicie a aplicação utilizando o profile dev com o seguinte comando:
 ```bash
   ./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
 ```
+---
+
+## Rodando em modo desenvolvimento com banco de dados não dockerizado
+
+### 1. Clone o Repositório
+
+Clone o repositório para o seu ambiente local:
+```bash
+  git clone https://github.com/nivaldoandrade/stocktrack-spring
+```
+
+### 2. Configurar as Variáveis de Ambiente
+
+Edite as variáveis de ambiente no arquivo localizado em src/main/resources/application-dev.properties. Para mais informações sobre as variáveis de ambiente de desenvolvimento, consulte a seção: [Configuração do Arquivo application-dev.properties](#configuração-do-arquivo-application-devproperties)
+
+#### **Observações Importantes:**
+1. **Banco de Dados Não Dockerizado:** É necessário ter PostgreSQL instalado e executando. Crie um banco de dados manualmente e preencha as variáveis `spring.datasource.url`, `spring.datasource.username` e `spring.datasource.password`;
+2. **Desativação do Docker Compose:** Para utilizar o banco de dados sem Docker, defina a variável `spring.docker.compose.enabled` como `false`;
+3. **Sincronização de Variáveis:** Lembre-se de atualizar a variável `spring.flyway.placeholders.db_name` no arquivo `application-dev.properties` com o mesmo nome do banco da dados especificado na variável `spring.datasource.url`.
+
+### 3. Iniciando a aplicação
+
+Você pode iniciar a aplicação de duas formas:
+
+1.	Executando a classe principal `StockTrackApplication` (src/main/java/StockTrackApplication.java) diretamente na sua IDE preferida.
+2.	Através do terminal, seguindo os passos abaixo:
+
+Passo a passo:
+
+Entre no diretório do projeto:
+
+```bash
+  cd stocktrack-api
+```
+
+Inicie a aplicação utilizando o profile dev com o seguinte comando:
+
+```bash
+  ./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
+```
+---
 
 ## Variáveis de Ambiente
 
