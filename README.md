@@ -1,3 +1,50 @@
+## Demonstração
+
+Para fins de demonstração, foi realizado o deploy da API em uma instância na oracle cloud. Foi utilizado o docker compose, nginx para proxy reverso e Let's Encrypt para a configuração do certificado digital e habilitação de HTTPS. No link abaixo, é possível utilizar o Swagger para testar a API:
+
+[Acessar Swagger UI - API Demo](https://stocktrackapi.nivaldoandrade.dev.br/swagger-ui/index.html)
+
+#### **Credenciaia de Teste**
+Para realizar testes, utilize as credenciais abaixo:
+- Usuário Admin:
+  - Usuário: admin
+  - Senha: 12345678
+---
+
+## Exemplo de uso da API
+
+Abaixo está um fluxo básico de uso da API que demonstra sua principal funcionalidade:
+
+1. **Autenticação:**  
+  Relize o login para obter um token JWT, que será usado para autenticar todas as requisições protegidas.
+2. **Criação de categoria e warehouse:**  
+  Antes de criar um produto é necessário criar uma categoria e warehouse, pois o produto precisa estar associado a essas entidades.
+3. **Criação de produto:**  
+  Com a categoria e warehouse criados, é possível criar um novo produto, incluindo informações como code, brand, estoque disponível em um ou mais warehouse
+
+Todos os detalhes de cada endpoint, incluindo corpo da requisição e resposta estão disponíveis na documentação do Swagger.
+
+---
+
+## **Documentação da API**
+
+Para visualizar a documentação interativa da API, você pode usar o Swagger. O Swagger fornece uma interface gráfica onde você pode explorar e testar as endpoints da API.
+
+Após iniciar os serviços, a documentação do Swagger estará disponível em:
+```bash
+  #Local
+  http://localhost:8080/swagger-ui/index.html
+  
+  #Online
+  https://stocktrackapi.nivaldoandrade.dev.br/swagger-ui/index.html
+  
+  usuário: admin
+  password: 12345678
+```
+Navegue até este URL no seu navegador para acessar a interface do Swagger, onde você poderá visualizar e interagir com a documentação da API.
+
+---
+
 ## Rodando em modo desenvolvimento com banco de dados dockerizado
 
 ### 1. Clone o Repositório
